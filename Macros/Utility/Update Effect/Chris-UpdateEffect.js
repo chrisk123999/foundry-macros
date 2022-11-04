@@ -1,0 +1,16 @@
+let tokenId = args[0];
+if (!tokenId) return;
+let token = await canvas.tokens.get(tokenId);
+if (!token) return;
+let actor = token.actor;
+let effectName = args[1];
+if (!effectName) return;
+let key = args[2];
+if (!key) return;
+let value = args[3];
+if (!value) return;
+let effect = actor.effects.find(eff => eff.label === effectName);
+if (!effect) return;
+let changes = foundry.utils.duplicate(effect.changes);
+changes[key].value = value;
+await effect.update({changes});
