@@ -15,7 +15,7 @@ if (canvas.scene.grid.type != 0) {
 		x: this.coords.previous.x + (token.w / 2),
 		y: this.coords.previous.y + (token.w / 2)
 	};
-	let intersectionPoint = quadraticIntersection(previousTokenCenter, currentTokenCenter, template.center, template.shape.radius, epsilon=0);
+	let intersectionPoint = quadraticIntersection(previousTokenCenter, currentTokenCenter, template.object.center, template.object.shape.radius, epsilon=0);
 	if (intersectionPoint.length === 0) return;
 	let ray = new Ray(intersectionPoint[0], currentTokenCenter);
 	cellDistance = (Math.ceil(ray.distance / canvas.scene.grid.size));
