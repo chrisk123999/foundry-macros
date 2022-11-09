@@ -1,0 +1,404 @@
+{
+  "type": "spell",
+  "system": {
+    "description": {
+      "value": "<p>The ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 5 feet it travels.</p>\n<p>The transformation of the ground is camouflaged to look natural. Any creature that can't see the area at the time the spell is cast must make a Wisdom (Perception) check against your spell save DC to recognize the terrain as hazardous before entering it.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "Basic Rules, Player's Handbook pg 277",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 10,
+      "units": "minute"
+    },
+    "target": {
+      "value": 20,
+      "width": null,
+      "units": "ft",
+      "type": "sphere"
+    },
+    "range": {
+      "value": 150,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": "",
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": "",
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "other",
+    "attackBonus": 0,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 2,
+    "school": "trs",
+    "components": {
+      "value": "seven sharp thorns or seven small twigs, each sharpened to a point",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "seven sharp thorns or seven small twigs, each sharpened to a point",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "always",
+      "prepared": true
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "name": "Spike Growth",
+  "flags": {
+    "ddbimporter": {
+      "id": 138779,
+      "definitionId": 2262,
+      "entityTypeId": 435869154,
+      "dndbeyond": {
+        "lookup": "classSpell",
+        "class": "Cleric",
+        "level": 6,
+        "characterClassId": 96640166,
+        "spellLevel": 2,
+        "ability": "wis",
+        "mod": 5,
+        "dc": 16,
+        "cantripBoost": false,
+        "overrideDC": false,
+        "id": 138779,
+        "entityTypeId": 435869154,
+        "healingBoost": 0,
+        "usesSpellSlot": true
+      },
+      "originalName": "Spike Growth",
+      "sources": [
+        {
+          "sourceId": 1,
+          "pageNumber": null,
+          "sourceType": 2
+        },
+        {
+          "sourceId": 2,
+          "pageNumber": 277,
+          "sourceType": 1
+        }
+      ],
+      "tags": [
+        "Damage",
+        "Control"
+      ],
+      "version": "3.1.19",
+      "effectsApplied": true,
+      "importId": "T6JknJqLOoasoEvt"
+    },
+    "spell-class-filter-for-5e": {
+      "parentClass": "cleric"
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "name": "Spike Growth",
+          "type": "script",
+          "scope": "global",
+          "command": "if (!game.modules.get(\"ActiveAuras\")?.active) {\n  ui.notifications.error(\"ActiveAuras is not enabled\");\n  return;\n}\n\nconst lastArg = args[args.length - 1];\nconsole.warn(args);\n\nif (args[0].tag === \"OnUse\" && args[0].macroPass === \"preActiveEffects\") {\n  const safeName = lastArg.itemData.name.replace(/\\s|'|\\.|’/g, \"_\");\n  const dataTracker = {\n    randomId: randomID(),\n    targetUuids: lastArg.targetUuids,\n    startRound: game.combat.round,\n    startTurn: game.combat.turn,\n  };\n\n  const item = await fromUuid(lastArg.itemUuid);\n  // await item.update(dataTracker);\n  await DAE.unsetFlag(item, `${safeName}ItemTracker`);\n  await DAE.setFlag(item, `${safeName}ItemTracker`, dataTracker);\n\n  return AAhelpers.applyTemplate(args);\n}\n\n\nasync function applySpikeGrowthDamage() {\n  const item = await fromUuid(lastArg.efData.origin);\n  const target = canvas.tokens.get(lastArg.tokenId);\n\n  const caster = item.parent;\n  const casterToken = canvas.tokens.placeables.find((t) => t.actor?.uuid === caster.uuid);\n  const damageRoll = await new Roll(`2d4[piercing]`).evaluate({ async: true });\n  if (game.dice3d) game.dice3d.showForRoll(damageRoll);\n  const workflowItemData = duplicate(item.data);\n  workflowItemData.system.components.concentration = false;\n  workflowItemData.system.duration = { value: null, units: \"inst\" };\n  workflowItemData.system.target = { value: null, width: null, units: \"\", type: \"creature\" };\n\n  setProperty(workflowItemData, \"flags.itemacro\", {});\n  setProperty(workflowItemData, \"flags.midi-qol\", {});\n  setProperty(workflowItemData, \"flags.dae\", {});\n  setProperty(workflowItemData, \"effects\", []);\n  delete workflowItemData._id;\n  workflowItemData.name = `${workflowItemData.name}: Movement Damage`;\n  // console.warn(\"workflowItemData\", workflowItemData);\n\n  await new MidiQOL.DamageOnlyWorkflow(\n    caster,\n    casterToken.data,\n    damageRoll.total,\n    \"piercing\",\n    [target],\n    damageRoll,\n    {\n      flavor: `(${CONFIG.DND5E.damageTypes[\"piercing\"]})`,\n      itemCardId: \"new\",\n      itemData: workflowItemData,\n      isCritical: false,\n    }\n  );\n\n}\n\nfunction getDamageTestString(token, flags) {\n  return `${flags.origin}-${flags.round}-${flags.turn}-${flags.randomId}-${token.x}-${token.y}-${token.elevation}`;\n}\n\nif (args[0] === \"on\") {\n  const safeName = lastArg.efData.label.replace(/\\s|'|\\.|’/g, \"_\");\n  const item = await fromUuid(lastArg.efData.origin);\n  const targetItemTracker = DAE.getFlag(item.parent, `${safeName}ItemTracker`);\n  const originalTarget = targetItemTracker.targetUuids.includes(lastArg.tokenUuid);\n  const target = canvas.tokens.get(lastArg.tokenId);\n  const targetTokenTrackerFlag = DAE.getFlag(target, `${safeName}Tracker`);\n  const targetedThisCombat = targetTokenTrackerFlag && targetItemTracker.randomId === targetTokenTrackerFlag.randomId;\n  const targetTokenTracker = targetedThisCombat\n    ? targetTokenTrackerFlag\n    : {\n      origin: lastArg.efData.origin,\n      randomId: targetItemTracker.randomId,\n      round: game.combat.round,\n      turn: game.combat.turn,\n      firstRound: true,\n    };\n\n  const testString = getDamageTestString(target, targetTokenTracker);\n  const existingTestString = hasProperty(targetTokenTracker, \"testString\");\n  const castTurn = targetItemTracker.startRound === game.combat.round && targetItemTracker.startTurn === game.combat.turn;\n\n  if (castTurn && originalTarget && targetTokenTracker.firstRound) {\n    console.debug(`Token ${target.name} is part of the original target for ${item.name}`);\n    targetTokenTracker.firstRound = false;\n  } else if (!existingTestString || (existingTestString && targetTokenTracker.testString !== testString)) {\n    await applySpikeGrowthDamage();\n  }\n\n  targetTokenTracker[\"testString\"] = testString;\n  await DAE.setFlag(target, `${safeName}Tracker`, targetTokenTracker);\n}\n\n\nif (args[0] === \"off\") {\n  const safeName = lastArg.efData.label.replace(/\\s|'|\\.|’/g, \"_\");\n  const target = canvas.tokens.get(lastArg.tokenId);\n  const targetTrackerFlag = DAE.getFlag(target, `${safeName}Tracker`);\n  const testString = getDamageTestString(target, targetTrackerFlag);\n  const isSame = testString === targetTrackerFlag.testString;\n\n  console.warn(\"isSame\", {\n    target,\n    targetTrackerFlag,\n    testString,\n    isSame,\n  });\n\n  if (!isSame) {\n    await applySpikeGrowthDamage();\n    const token = await fromUuid(lastArg.tokenUuid);\n    targetTrackerFlag[\"testString\"] = getDamageTestString(token, targetTrackerFlag);\n    await DAE.setFlag(token, `${safeName}Tracker`, targetTrackerFlag);\n    await ActiveAuras.MainAura(token, \"movement update\", token.parent.id);\n  }\n\n}\n"
+        },
+        "options": {},
+        "apps": {},
+        "compendium": null,
+        "name": "Spike Growth",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "Ci2oCKdswvomgIrG",
+        "_id": null,
+        "img": "icons/svg/dice-target.svg",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "effectActivation": false
+    },
+    "custom-character-sheet-sections": {
+      "sectionName": ""
+    },
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "rollOther": false,
+      "critOther": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "enhanced-terrain-layer": {
+      "multiple": 0.5,
+      "elevation": null,
+      "depth": null,
+      "environment": ""
+    },
+    "templatemacro": {
+      "whenStaying": {
+        "asGM": false,
+        "command": "if (canvas.scene.grid.units != 'ft') return;\nif (this.hook.animate === false) return;\nlet cellDistance;\nif (canvas.scene.grid.type != 0) {\n\tlet through = this.hook.templatemacro.through.find(tmp => tmp.templateId === template.id);\n\tif (!through) return;\n\tcellDistance = through.cells.length - 1;\n} else {\n\tlet token = canvas.tokens.get(this.tokenId);\n\tlet currentTokenCenter = {\n\t\tx: this.coords.current.x + (token.w / 2),\n\t\ty: this.coords.current.y + (token.w / 2)\n\t};\n\tlet previousTokenCenter = {\n\t\tx: this.coords.previous.x + (token.w / 2),\n\t\ty: this.coords.previous.y + (token.w / 2)\n\t};\n\tlet intersectionPoint = quadraticIntersection(previousTokenCenter, currentTokenCenter, template.object.center, template.object.shape.radius, epsilon=0);\n\tif (intersectionPoint.length === 0) return;\n\tlet ray = new Ray(intersectionPoint[0], currentTokenCenter);\n\tcellDistance = (Math.ceil(ray.distance / canvas.scene.grid.size));\n}\nlet scale = Math.ceil(canvas.scene.grid.distance / 5);\nlet distance = cellDistance * scale;\nif (distance <= 0) return;\nfor (let i = 0; i < distance; i++) {\n\tlet damageDice = '2d4[piercing]';\n\tlet diceRoll = await new Roll(damageDice).roll({async: true});\n\tlet diceTotal = diceRoll.total;\n\tdiceRoll.toMessage({\n\t\trollMode: 'roll',\n\t\tspeaker: {alias: name},\n\t\tflavor: 'Spike Growth Damage'\n\t});\n\tlet token = canvas.tokens.get(this.tokenId);\n\tawait MidiQOL.applyTokenDamage(\n\t\t[\n\t\t\t{\n\t\t\t\tdamage: diceTotal,\n\t\t\t\ttype: 'piercing'\n\t\t\t}\n\t\t],\n\t\tdiceTotal,\n\t\tnew Set([token]),\n\t\tnull,\n\t\tnull\n\t);\n}"
+      },
+      "whenEntered": {
+        "asGM": false,
+        "command": "if (canvas.scene.grid.units != 'ft') return;\nif (this.hook.animate === false) return;\nlet cellDistance;\nif (canvas.scene.grid.type != 0) {\n\tlet through = this.hook.templatemacro.through.find(tmp => tmp.templateId === template.id);\n\tif (!through) return;\n\tcellDistance = through.cells.length;\n} else {\n\tlet token = canvas.tokens.get(this.tokenId);\n\tlet currentTokenCenter = {\n\t\tx: this.coords.current.x + (token.w / 2),\n\t\ty: this.coords.current.y + (token.w / 2)\n\t};\n\tlet previousTokenCenter = {\n\t\tx: this.coords.previous.x + (token.w / 2),\n\t\ty: this.coords.previous.y + (token.w / 2)\n\t};\n\tlet intersectionPoint = quadraticIntersection(previousTokenCenter, currentTokenCenter, template.object.center, template.object.shape.radius, epsilon=0);\n\tif (intersectionPoint.length === 0) return;\n\tlet ray = new Ray(intersectionPoint[0], currentTokenCenter);\n\tcellDistance = (Math.ceil(ray.distance / canvas.scene.grid.size));\n}\nlet scale = Math.ceil(canvas.scene.grid.distance / 5);\nlet distance = cellDistance * scale;\nif (distance <= 0) return;\nfor (let i = 0; i < distance; i++) {\n\tlet damageDice = '2d4[piercing]';\n\tlet diceRoll = await new Roll(damageDice).roll({async: true});\n\tlet diceTotal = diceRoll.total;\n\tdiceRoll.toMessage({\n\t\trollMode: 'roll',\n\t\tspeaker: {alias: name},\n\t\tflavor: 'Spike Growth Damage'\n\t});\n\tlet token = canvas.tokens.get(this.tokenId);\n\tawait MidiQOL.applyTokenDamage(\n\t\t[\n\t\t\t{\n\t\t\t\tdamage: diceTotal,\n\t\t\t\ttype: 'piercing'\n\t\t\t}\n\t\t],\n\t\tdiceTotal,\n\t\tnew Set([token]),\n\t\tnull,\n\t\tnull\n\t);\n}"
+      },
+      "whenLeft": {
+        "asGM": false,
+        "command": "if (canvas.scene.grid.units != 'ft') return;\nif (this.hook.animate === false) return;\nlet cellDistance;\nif (canvas.scene.grid.type != 0) {\n\tlet through = this.hook.templatemacro.through.find(tmp => tmp.templateId === template.id);\n\tif (!through) return;\n\tcellDistance = through.cells.length;\n} else {\n\tlet token = canvas.tokens.get(this.tokenId);\n\tlet currentTokenCenter = {\n\t\tx: this.coords.current.x + (token.w / 2),\n\t\ty: this.coords.current.y + (token.w / 2)\n\t};\n\tlet previousTokenCenter = {\n\t\tx: this.coords.previous.x + (token.w / 2),\n\t\ty: this.coords.previous.y + (token.w / 2)\n\t};\n\tlet intersectionPoint = quadraticIntersection(previousTokenCenter, currentTokenCenter, template.object.center, template.object.shape.radius, epsilon=0);\n\tif (intersectionPoint.length === 0) return;\n\tlet ray = new Ray(intersectionPoint[0], currentTokenCenter);\n\tcellDistance = (Math.ceil(ray.distance / canvas.scene.grid.size));\n}\nlet scale = Math.ceil(canvas.scene.grid.distance / 5);\nlet distance = cellDistance * scale;\nif (distance <= 0) return;\nfor (let i = 0; i < distance; i++) {\n\tlet damageDice = '2d4[piercing]';\n\tlet diceRoll = await new Roll(damageDice).roll({async: true});\n\tlet diceTotal = diceRoll.total;\n\tdiceRoll.toMessage({\n\t\trollMode: 'roll',\n\t\tspeaker: {alias: name},\n\t\tflavor: 'Spike Growth Damage'\n\t});\n\tlet token = canvas.tokens.get(this.tokenId);\n\tawait MidiQOL.applyTokenDamage(\n\t\t[\n\t\t\t{\n\t\t\t\tdamage: diceTotal,\n\t\t\t\ttype: 'piercing'\n\t\t\t}\n\t\t],\n\t\tdiceTotal,\n\t\tnew Set([token]),\n\t\tnull,\n\t\tnull\n\t);\n}"
+      },
+      "whenCreated": {
+        "asGM": false,
+        "command": "console.log(template);"
+      }
+    },
+    "autoanimations": {
+      "id": "9420b253-a968-4bbd-8761-5e6e41d019ac",
+      "label": "Spike Growth",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "templatefx",
+      "primary": {
+        "video": {
+          "dbSection": "templatefx",
+          "menuType": "circle",
+          "animation": "drop",
+          "variant": "01",
+          "color": "darkgreen",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "delay": 0,
+          "elevation": 1000,
+          "isMasked": false,
+          "isWait": false,
+          "occlusionAlpha": 0.5,
+          "occlusionMode": "3",
+          "opacity": 1,
+          "persistent": false,
+          "persistType": "sequencerground",
+          "playbackRate": 1,
+          "removeTemplate": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "rotate": 0,
+          "scale": "1",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "size": 1.5,
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "size": 1,
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "size": 1,
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": false,
+      "fromAmmo": false,
+      "version": 5
+    },
+    "core": {
+      "sourceId": "Actor.gAdp7h5dQr03DikB.Item.xiYLS8xoQOwHdMLW"
+    },
+    "exportSource": {
+      "world": "wordal",
+      "system": "dnd5e",
+      "coreVersion": "10.288",
+      "systemVersion": "2.0.3"
+    }
+  },
+  "effects": [],
+  "img": "icons/magic/nature/trap-spikes-thorns-green.webp",
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.0.3",
+    "coreVersion": "10.288",
+    "createdTime": 1666525965694,
+    "modifiedTime": 1667995569454,
+    "lastModifiedBy": "Ci2oCKdswvomgIrG"
+  }
+}
