@@ -1,0 +1,271 @@
+{
+  "name": "Potion of Healing (Poison)",
+  "type": "consumable",
+  "system": {
+    "description": {
+      "value": "<p class=\"Core-Styles_Core-Body\">You regain hit points when you drink this potion. The number of hit points depends on the potion’s rarity, as shown in the Potions of Healing table. Whatever its potency, the potion’s red liquid glimmers when<span class=\"No-Break\"> agitated.</span></p>\n<p><strong>Potions of Healing</strong></p>\n<div class=\"table-overflow-wrapper\">\n<table>\n<thead>\n<tr>\n<th>Potion of …</th>\n<th>Rarity</th>\n<th>HP Regained</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Healing</td>\n<td>Common</td>\n<td>2d4 + 2</td>\n</tr>\n<tr>\n<td>Greater healing</td>\n<td>Uncommon</td>\n<td>4d4 + 4</td>\n</tr>\n<tr>\n<td>Superior healing</td>\n<td>Rare</td>\n<td>8d4 + 8</td>\n</tr>\n<tr>\n<td>Supreme healing</td>\n<td>Very rare</td>\n<td>10d4 + 20</td>\n</tr>\n</tbody>\n</table>\n</div>",
+      "chat": "",
+      "unidentified": "Potion"
+    },
+    "source": "Basic Rules, Player's Handbook pg 187",
+    "quantity": 1,
+    "weight": 0.5,
+    "price": 0,
+    "attunement": 0,
+    "equipped": false,
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "day"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": ""
+    },
+    "uses": {
+      "value": 1,
+      "max": "1",
+      "per": "charges",
+      "recovery": "",
+      "autoDestroy": true,
+      "autoUse": false
+    },
+    "consume": {
+      "type": "",
+      "target": "",
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "heal",
+    "attackBonus": 0,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [
+        [
+          "3d6[poison]",
+          "poison"
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "con",
+      "dc": 13,
+      "scaling": "flat"
+    },
+    "consumableType": "potion",
+    "baseItem": "",
+    "toolType": "",
+    "properties": {
+      "mgc": true
+    }
+  },
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {
+        "type": "Potion",
+        "filterType": "Potion",
+        "isConsumable": true,
+        "isContainer": false,
+        "isCustomItem": false,
+        "isHomebrew": false,
+        "isMonkWeapon": false,
+        "isPack": false,
+        "levelInfusionGranted": null,
+        "tags": [
+          "Healing",
+          "Consumable"
+        ],
+        "sources": [
+          {
+            "sourceId": 1,
+            "pageNumber": null,
+            "sourceType": 2
+          },
+          {
+            "sourceId": 2,
+            "pageNumber": 187,
+            "sourceType": 1
+          }
+        ],
+        "stackable": true
+      },
+      "id": 0,
+      "entityTypeId": 0,
+      "definitionEntityTypeId": 112130694,
+      "definitionId": 4708,
+      "originalName": "Potion of Healing (Normal)",
+      "version": "3.1.17"
+    },
+    "magicitems": {
+      "enabled": true,
+      "charges": "0",
+      "chargeType": "c1",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t2",
+      "rechargeUnit": "r1",
+      "destroy": false,
+      "destroyCheck": "d1",
+      "spells": {},
+      "feats": {},
+      "tables": {},
+      "equipped": false,
+      "attuned": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "sorting": "l"
+    },
+    "cf": {
+      "id": "temp_7a2gauimang"
+    },
+    "custom-character-sheet-sections": {
+      "sectionName": ""
+    },
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": true,
+      "halfdam": false,
+      "rollOther": false,
+      "critOther": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "core": {
+      "sourceId": "Compendium.world.ddb-wordal-items.7o7v2LhWP80VJQLw"
+    },
+    "itemacro": {
+      "macro": {
+        "name": "Potion of Healing (Poison)",
+        "type": "script",
+        "scope": "global",
+        "command": "if (game.combat != undefined) {\n\tif (game.combat != null) {\n\t\treturn;\n\t}\n}\nif (args[0].targets.length === 0) return;\nfunction sleep(ms) {\n\treturn new Promise(resolve => setTimeout(resolve, ms));\n}\nlet targetToken = args[0].targets[0];\nlet targetActor = targetToken.actor;\nlet effect = targetActor.effects.find(eff => eff.label === 'Potion of Poison');\nif (!effect) return;\nlet stacks = 3;\nwhile (stacks > 0) {\n\tif (actor.system.attributes.hp.value <= 0) break;\n\tlet save = await actor.rollAbilitySave('con');\n\tif (save.total >= 13) stacks -= 1;\n\tif (stacks === 0) {\n\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: targetActor.uuid, effects: [effect.id]});\n\t\tbreak;\n\t}\n\tlet damageList = {\n\t\t3: '3d6[poison]',\n\t\t2: '2d6[poison]',\n\t\t1: '1d6[poison]'\n\t};\n\tlet damageDice = damageList[stacks];\n\tdamageRoll = await new Roll(damageDice).evaluate({async: true})\n\tdamageRoll.toMessage({\n\t\trollMode: 'roll',\n\t\tspeaker: {alias: name},\n\t\tflavor: 'Potion of Poison'\n\t});\n\tdamage = damageRoll.total;\n\tlet damageType = 'poison';\n\tlet targets = [targetToken];\n\tawait MidiQOL.applyTokenDamage(\n\t\t[\n\t\t\t{\n\t\t\t\tdamage: damage,\n\t\t\t\ttype: damageType\n\t\t\t}\n\t\t],\n\t\tdamage,\n\t\tnew Set(targets),\n\t\tnull,\n\t\tnull\n\t);\n\tawait sleep(500);\n}",
+        "author": "Ci2oCKdswvomgIrG",
+        "_id": null,
+        "img": "icons/svg/dice-target.svg",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "exportSource": {
+      "world": "wordal",
+      "system": "dnd5e",
+      "coreVersion": "10.290",
+      "systemVersion": "2.0.3"
+    }
+  },
+  "effects": [
+    {
+      "label": "Potion of Poison",
+      "icon": "icons/consumables/potions/potion-tube-corked-red.webp",
+      "changes": [
+        {
+          "key": "macro.CE",
+          "mode": 0,
+          "value": "Poisoned",
+          "priority": 20
+        }
+      ],
+      "transfer": false,
+      "_id": "WGdpwKVg1saG913A",
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "origin": null,
+      "tint": null,
+      "flags": {
+        "effectmacro": {
+          "onTurnStart": {
+            "script": "let poisonedEffect = token.actor.effects.find(eff => eff.label === 'Poisoned');\nif (!poisonedEffect) {\n\teffect.delete();\n\treturn;\n}\nlet stacks = await effect.getFlag('world', 'poisonStacks');\nif (!stacks) stacks = 3;\nlet damageList = {\n\t3: '3d6[poison]',\n\t2: '2d6[poison]',\n\t1: '1d6[poison]'\n};\nlet damageDice = damageList[stacks];\ndamageRoll = await new Roll(damageDice).evaluate({async: true})\ndamageRoll.toMessage({\n\trollMode: 'roll',\n\tspeaker: {alias: name},\n\tflavor: 'Potion of Poison'\n});\ndamage = damageRoll.total;\nlet damageType = 'poison';\nlet targets = [token];\nawait MidiQOL.applyTokenDamage(\n    [\n        {\n            damage: damage,\n            type: damageType\n        }\n    ],\n    damage,\n    new Set(targets),\n    null,\n    null\n);"
+          },
+          "onTurnEnd": {
+            "script": "let poisonedEffect = token.actor.effects.find(eff => eff.label === 'Poisoned');\nif (!poisonedEffect) {\n\teffect.delete();\n\treturn;\n}\nlet stacks = await effect.getFlag('world', 'poisonStacks');\nif (!stacks) stacks = 3;\nlet save = await token.actor.rollAbilitySave('con');\nif (save.total >= 13) {\n\tstacks -= 1;\n\tif (stacks === 0) {\n\t\teffect.delete()\n\t\treturn;\n\t}\n\tawait effect.setFlag('world', 'poisonStacks', stacks);\n}"
+          }
+        },
+        "dae": {
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "stackable": "none",
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "core": {
+          "statusId": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "radius": null,
+          "alignment": "",
+          "type": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false
+        }
+      }
+    }
+  ],
+  "img": "icons/consumables/potions/potion-tube-corked-red.webp",
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.0.3",
+    "coreVersion": "10.290",
+    "createdTime": 1666219576483,
+    "modifiedTime": 1668242681477,
+    "lastModifiedBy": "Ci2oCKdswvomgIrG"
+  }
+}

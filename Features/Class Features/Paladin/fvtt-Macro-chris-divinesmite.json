@@ -1,0 +1,27 @@
+{
+  "name": "Chris-DivineSmite",
+  "type": "script",
+  "author": "Ci2oCKdswvomgIrG",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "async function showMenu(menuTitle, menuOptions) {\n    let buttonData = [];\n    for (let i = 0; i < menuOptions.length; i++) {\n\tlet menuLabel = menuOptions[i][0];\n\tlet menuValue = menuOptions[i][1];\n\tlet generatedOption = {};\n\tgeneratedOption = {\n\t\tlabel: menuLabel,\n\t\tvalue: menuValue\n\t};\n\tbuttonData.push(generatedOption);\n    }\n    let menuReturn = await warpgate.buttonDialog({\n\tbuttons: buttonData,\n\ttitle: menuTitle\n    }, 'column');\n    return menuReturn;\n}\nif (args[0].hitTargets.size != 1) return;\nif (args[0].item.type != 'weapon') return;\nif (!(args[0].item.system.weaponType === 'martialM' || args[0].item.system.weaponType === 'simpleM')) return;\nlet actor = args[0].actor;\nlet spells = actor.system.spells;\nlet pactSlots = spells.pact.value;\nlet pactLevel = spells.pact.level;\nlet spell1 = spells.spell1.value;\nlet spell2 = spells.spell2.value;\nlet spell3 = spells.spell3.value;\nlet spell4 = spells.spell4.value;\nlet spell5 = spells.spell5.value;\nlet spell6 = spells.spell6.value;\nlet spell7 = spells.spell7.value;\nlet spell8 = spells.spell8.value;\nlet spell9 = spells.spell9.value;\nif (pactSlots + spell1 + spell2 + spell3 + spell4 + spell5 + spell6 + spell7 + spell8 + spell9 === 0) return;\nmenuOptions = [];\nif (pactSlots > 0) menuOptions.push(['Pact (' + pactLevel + ')', 'p']);\nif (spell1 > 0) menuOptions.push(['1st Level', 1]);\nif (spell2 > 0) menuOptions.push(['2nd Level', 2]);\nif (spell3 > 0) menuOptions.push(['3rd Level', 3]);\nif (spell4 > 0) menuOptions.push(['4th Level', 4]);\nif (spell5 > 0) menuOptions.push(['5th Level', 5]);\nif (spell5 > 0) menuOptions.push(['6th Level', 6]);\nif (spell5 > 0) menuOptions.push(['7th Level', 7]);\nif (spell5 > 0) menuOptions.push(['8th Level', 8]);\nif (spell5 > 0) menuOptions.push(['9th Level', 9]);\nmenuOptions.push(['No', 0]);\nlet title = 'Use Divine Smite?';\nlet selectedOption = await showMenu(title, menuOptions);\nif (!selectedOption || selectedOption === 0) return;\nlet update = {};\nlet damageDiceNum;\nswitch (selectedOption) {\n    case 'p':\n        update = {'system.spells.pact.value': pactSlots - 1};\n        damageDiceNum = pactLevel + 1;\n        break;\n    case 1:\n        update = {'system.spells.spell1.value': spell1 - 1};\n        damageDiceNum = 2;\n        break;\n    case 2:\n        update = {'system.spells.spell2.value': spell2 - 1};\n        damageDiceNum = 3;\n        break;\n    case 3:\n        update = {'system.spells.spell3.value': spell3 - 1};\n        damageDiceNum = 4;\n        break;\n    case 4:\n        update = {'system.spells.spell4.value': spell4 - 1};\n        damageDiceNum = 5;\n        break;\n    case 5:\n        update = {'system.spells.spell5.value': spell5 - 1};\n        damageDiceNum = 5;\n        break;\n    case 6:\n        update = {'system.spells.spell6.value': spell6 - 1};\n        damageDiceNum = 5;\n        break;\n    case 7:\n        update = {'system.spells.spell7.value': spell7 - 1};\n        damageDiceNum = 5;\n        break;\n    case 8:\n        update = {'system.spells.spell8.value': spell8 - 1};\n        damageDiceNum = 5;\n        break;\n    case 9:\n        update = {'system.spells.spell9.value': spell9 - 1};\n        damageDiceNum = 5;\n        break;\n}\nawait actor.update(update);\nlet targetToken = args[0].targets[0];\nlet targetActor = targetToken.actor;\nlet type = targetActor.system.details.type;\nif (!type) {\n    type = targetActor.system.details.race.toLowerCase();\n} else if (type) {\n    type = targetActor.system.details.type.value;\n}\nif (type === 'undead' || type === 'fiend') damageDiceNum += 1;\nif (args[0].isCritical === true) damageDiceNum = damageDiceNum * 2;\nlet damageDice = damageDiceNum + 'd8[radiant]';\nconst workflow = MidiQOL.Workflow.getWorkflow(args[0].uuid);\nlet damageFormula = workflow.damageRoll.formula + ' + ' + damageDice;\nworkflow.damageRoll = await new Roll(damageFormula).roll({async: true});\nworkflow.damageTotal = workflow.damageRoll.total;\nworkflow.damageRollHTML = await workflow.damageRoll.render();\nlet feature = await actor.items.getName('Divine Smite');\nawait feature.roll();",
+  "flags": {
+    "advanced-macros": {
+      "runAsGM": false
+    },
+    "exportSource": {
+      "world": "wordal",
+      "system": "dnd5e",
+      "coreVersion": "10.290",
+      "systemVersion": "2.0.3"
+    }
+  },
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.0.3",
+    "coreVersion": "10.288",
+    "createdTime": 1666957314978,
+    "modifiedTime": 1667542624059,
+    "lastModifiedBy": "Ci2oCKdswvomgIrG"
+  }
+}

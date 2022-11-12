@@ -1,19 +1,8 @@
 if (!args) return;
-let menuTitle = args[0];
-let menuOptions = args[1];
-let buttonData = [];
-for (let i = 0; i < menuOptions.length; i++) {
-	let menuLabel = menuOptions[i][0];
-	let menuValue = menuOptions[i][1];
-	let generatedOption = {};
-	generatedOption = {
-		label: menuLabel,
-		value: menuValue
-	};
-	buttonData.push(generatedOption);
-}
+let title = args[0];
+let buttons = args[1].map(([label,value]) => ({label,value}));
 let menuReturn = await warpgate.buttonDialog({
-	buttons: buttonData,
-	title: menuTitle
+    buttons,
+    title,
 }, 'column');
 return menuReturn;
