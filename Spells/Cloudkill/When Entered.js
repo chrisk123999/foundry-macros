@@ -31,8 +31,8 @@ let effectData = {
 	'flags': {
 		'effectmacro': {
 			'onTurnStart': {
-            "script": "let combatTurn = game.combat.round + '-' + game.combat.turn;\nlet templateid = effect.flags.world.spell.cloudkill.templateid;\ntoken.document.setFlag('world', `spell.cloudkill.${templateid}.turn`, combatTurn);"
-          }
+				"script": "let combatTurn = game.combat.round + '-' + game.combat.turn;\nlet templateid = effect.flags.world.spell.cloudkill.templateid;\ntoken.document.setFlag('world', `spell.cloudkill.${templateid}.turn`, combatTurn);"
+			}
 		},
 		'world': {
 			'spell': {
