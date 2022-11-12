@@ -1,8 +1,8 @@
-console.log('Processing Entered');
+console.log('Processing When Staying');
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
-await sleep(10);
+await sleep(20);
 let doDamage = false;
 if (game.combat != null && game.combat != undefined) {
 	let combatTurn = game.combat.round + '-' + game.combat.turn;
@@ -55,6 +55,7 @@ let addEffect = true;
 if (cloudEffect) {
 	console.log('Token has effect already.');
 	addEffect = false;
+	doDamage = false;
 	let otherSpellLevel = cloudEffect.flags.world.spell.cloudkill.spellLevel;
 	let otherSpelldc = cloudEffect.flags.world.spell.cloudkill.spelldc;
 	if (otherSpellLevel < spellLevel) {

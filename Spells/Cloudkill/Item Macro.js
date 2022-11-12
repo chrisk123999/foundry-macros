@@ -1,3 +1,4 @@
+console.log('Item Macro');
 let template = canvas.scene.collections.templates.get(args[0].templateId);
 if (!template) return;
 let spellLevel = args[0].spellLevel;
@@ -19,13 +20,15 @@ let effectData = {
 	'flags': {
 		'effectmacro': {
 			'onTurnStart': {
-				'script': "let combatTurn = game.combat.round + '-' + game.combat.turn;\nlet templateId = effect.getFlag('world', 'spell.cloudkill.id');\nif (!templateId) return;\ntoken.document.setFlag('world', `spell.cloudkill.${templateId}.turn`, combatTurn);"
-			}
+            "script": "let combatTurn = game.combat.round + '-' + game.combat.turn;\nlet templateid = effect.flags.world.spell.cloudkill.templateid;\ntoken.document.setFlag('world', `spell.cloudkill.${templateid}.turn`, combatTurn);"
+          }
 		},
 		'world': {
 			'spell': {
 				'cloudkill': {
-					'id': args[0].templateId
+					'templateid': template.id,
+					'spellLevel': spellLevel,
+					'spelldc': spelldc
 				}
 			}
 		}
@@ -33,11 +36,27 @@ let effectData = {
 };
 let tokenList = [];
 for (let i = 0; args[0].targets.length > i; i++) {
-	if (!tokenList.includes(args[0].targets[i].id)) {
-		tokenList.push(args[0].targets[i].id);
-		await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: args[0].targets[i].actor.uuid, effects: [effectData]});
+	let otherToken = args[0].targets[i];
+	tokenList.push(otherToken.id);
+	let otherActor = otherToken.actor;
+	let cloudEffect = otherActor.effects.find(eff => eff.label === 'Cloudkill');
+	let addEffect = true;
+	if (cloudEffect) {
+		addEffect = false;
+		let otherSpellLevel = cloudEffect.flags.world.spell.cloudkill.spellLevel;
+		let otherSpelldc = cloudEffect.flags.world.spell.cloudkill.spelldc;
+		if (otherSpellLevel < spellLevel) {
+			addEffect = true;
+			await MidiQOL.socket().executeAsGM("removeEffects", {actorUuid: otherActor.uuid, effects: [cloudEffect.id]});
+		} else if (otherSpellLevel === spellLevel && otherSpelldc < spelldc) {
+			addEffect = true;
+			await MidiQOL.socket().executeAsGM("removeEffects", {actorUuid: otherActor.uuid, effects: [cloudEffect.id]});
+		}
 	}
+	if (addEffect) {
+		await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: otherActor.uuid, effects: [effectData]});
+	}
+	
 }
-template.setFlag('world', 'tokens', tokenList);
-template.setFlag('world', 'spellLevel', spellLevel);
-template.setFlag('world', 'spelldc', spelldc);
+template.setFlag('world', 'spell.cloudkill', {spellLevel, spelldc, tokenList});
+console.log(template);
