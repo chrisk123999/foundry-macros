@@ -4,36 +4,7 @@ if (!template) return;
 let spellLevel = args[0].spellLevel;
 let spelldc = args[0].actor.system.attributes.spelldc;
 let damageRoll = spellLevel + 'd8';
-let effectData = {
-	'label': 'Cloudkill',
-	'icon': 'icons/magic/air/fog-gas-smoke-swirling-green.webp',
-	'changes': [
-		{
-		'key': 'flags.midi-qol.OverTime',
-		'mode': 5,
-		'value': 'turn=start, rollType=save, saveAbility= con, saveDamage= halfdamage, saveRemove= false, saveMagic=true, damageType= poison, damageRoll= ' + damageRoll + ', saveDC = ' + spelldc,
-		'priority': 20
-		}
-	],
-	'origin': args[0].itemUuid,
-	'duration': {seconds: 86400},
-	'flags': {
-		'effectmacro': {
-			'onTurnStart': {
-				"script": "let combatTurn = game.combat.round + '-' + game.combat.turn;\nlet templateid = effect.flags.world.spell.cloudkill.templateid;\ntoken.document.setFlag('world', `spell.cloudkill.${templateid}.turn`, combatTurn);"
-			}
-		},
-		'world': {
-			'spell': {
-				'cloudkill': {
-					'templateid': template.id,
-					'spellLevel': spellLevel,
-					'spelldc': spelldc
-				}
-			}
-		}
-	}
-};
+
 let tokenList = [];
 for (let i = 0; args[0].targets.length > i; i++) {
 	let otherToken = args[0].targets[i];
@@ -54,9 +25,38 @@ for (let i = 0; args[0].targets.length > i; i++) {
 		}
 	}
 	if (addEffect) {
+		let effectData = {
+			'label': 'Cloudkill',
+			'icon': 'icons/magic/air/fog-gas-smoke-swirling-green.webp',
+			'changes': [
+				{
+				'key': 'flags.midi-qol.OverTime',
+				'mode': 5,
+				'value': 'turn=start, rollType=save, saveAbility= con, saveDamage= halfdamage, saveRemove= false, saveMagic=true, damageType= poison, damageRoll= ' + damageRoll + ', saveDC = ' + spelldc,
+				'priority': 20
+				}
+			],
+			'origin': args[0].itemUuid,
+			'duration': {seconds: 86400},
+			'flags': {
+				'effectmacro': {
+					'onTurnStart': {
+						"script": "let combatTurn = game.combat.round + '-' + game.combat.turn;\nlet templateid = effect.flags.world.spell.cloudkill.templateid;\ntoken.document.setFlag('world', `spell.cloudkill.${templateid}.turn`, combatTurn);"
+					}
+				},
+				'world': {
+					'spell': {
+						'cloudkill': {
+							'templateid': template.id,
+							'spellLevel': spellLevel,
+							'spelldc': spelldc
+						}
+					}
+				}
+			}
+		};
 		await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: otherActor.uuid, effects: [effectData]});
 	}
-	
 }
 template.setFlag('world', 'spell.cloudkill', {spellLevel, spelldc, tokenList});
 console.log(template);

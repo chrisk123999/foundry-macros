@@ -15,8 +15,6 @@ if (game.combat != null && game.combat != undefined) {
 let spellLevel = template.flags.world.spell.cloudkill.spellLevel;
 let spelldc = template.flags.world.spell.cloudkill.spelldc;
 let damageRoll = spellLevel + 'd8';
-let inTemplates = template.flags.world.spell.cloudkill.inTemplates;
-if (!inTemplates.includes(template.id)) inTemplates.push(template.id);
 let effectData = {
 	'label': 'Cloudkill',
 	'icon': 'icons/magic/air/fog-gas-smoke-swirling-green.webp',
@@ -41,8 +39,7 @@ let effectData = {
 				'cloudkill': {
 					'templateid': template.id,
 					'spellLevel': spellLevel,
-					'spelldc': spelldc,
-					'inTemplates': inTemplates
+					'spelldc': spelldc
 				}
 			}
 		}
