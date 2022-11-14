@@ -3,7 +3,7 @@
   "type": "feat",
   "system": {
     "description": {
-      "value": "<p></p>",
+      "value": "<p>Change this description.</p>",
       "chat": "",
       "unidentified": ""
     },
@@ -97,7 +97,9 @@
           "stackable": "none",
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": []
+          "specialDuration": [
+            "combatEnd"
+          ]
         },
         "core": {
           "statusId": ""
@@ -173,7 +175,7 @@
     "systemVersion": "2.0.3",
     "coreVersion": "10.290",
     "createdTime": 1668410317242,
-    "modifiedTime": 1668413716071,
+    "modifiedTime": 1668417334190,
     "lastModifiedBy": "Ci2oCKdswvomgIrG"
   }
 }

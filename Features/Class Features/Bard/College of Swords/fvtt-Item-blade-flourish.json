@@ -3,7 +3,7 @@
   "type": "feat",
   "system": {
     "description": {
-      "value": "<p></p>",
+      "value": "<p>Change this description.</p>",
       "chat": "",
       "unidentified": ""
     },
@@ -31,15 +31,15 @@
     "uses": {
       "value": null,
       "max": "",
-      "per": null,
+      "per": "",
       "recovery": ""
     },
     "consume": {
-      "type": "charges",
-      "target": "YVqsmeudL2ucbtkg",
-      "amount": 1
+      "type": "",
+      "target": "",
+      "amount": null
     },
-    "ability": null,
+    "ability": "",
     "actionType": "",
     "attackBonus": 0,
     "chatFlavor": "",
@@ -118,6 +118,28 @@
     "core": {
       "sourceId": "Actor.l6eb8WvXXKNkH2Mo.Item.sl9ixUiOfD1MqIe3"
     },
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "midi-qol": {
+      "effectActivation": false
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "rollOther": false,
+      "critOther": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
     "exportSource": {
       "world": "wordal",
       "system": "dnd5e",
@@ -127,7 +149,7 @@
   },
   "effects": [
     {
-      "label": "Blade Flourish",
+      "label": "Blade Flourish - Passive Effects",
       "icon": "icons/skills/melee/maneuver-greatsword-yellow.webp",
       "changes": [
         {
@@ -185,7 +207,7 @@
     "systemVersion": "2.0.3",
     "coreVersion": "10.290",
     "createdTime": 1668407703768,
-    "modifiedTime": 1668413709108,
+    "modifiedTime": 1668417331270,
     "lastModifiedBy": "Ci2oCKdswvomgIrG"
   }
 }

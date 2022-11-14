@@ -10,3 +10,4 @@ Chris - Warpgate Menu Helper
 - Fill in the feature descriptions (If you use the DnD Beyond importer all of them except for "Blade Flourish Movement" should already exist on the actor but will need to be replaced)  
 - Make a hotbar macro and name it "Chris-BladeFlourish" and configure ownership to "All Players: Observer."  
 - Copy the macro from "Chris-BladeFlourish.js" into it.  
+- Actor must have a scale called "bardic-inspiration" that is setup as the bard inspiration dice. If you use the DnDBeyond importer this is already done for you. 
