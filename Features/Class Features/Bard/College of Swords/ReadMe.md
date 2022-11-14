@@ -1,0 +1,12 @@
+# Module Requirements  
+Advanced Macros  
+Dynamic Active Effects  
+Midi-Qol (and it's own associated requirements)  
+Warpgate  
+# Macro Requirements  
+Chris - Warpgate Menu Helper  
+# Setup Instructions  
+- Import all the json files as new items and add them to the actor as features.  Do not rename any of them.  
+- Fill in each items's description (If you use the DnD Beyond importer all of them except for "Blade Flourish Movement" should already exist on the actor but will need to be replaced)  
+- Make a hotbar macro and name it "Chris-BladeFlourish" and configure ownership to "All Players: Observer."  
+- Copy the macro from "Chris-BladeFlourish.js" into it.  

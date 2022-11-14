@@ -15,6 +15,8 @@ if (game.combat != null && game.combat != undefined) {
 let spellLevel = template.flags.world.spell.cloudkill.spellLevel;
 let spelldc = template.flags.world.spell.cloudkill.spelldc;
 let damageRoll = spellLevel + 'd8';
+let inTemplates = template.flags.world.spell.cloudkill.inTemplates;
+if (!inTemplates.includes(template.id)) inTemplates.push(template.id);
 let effectData = {
 	'label': 'Cloudkill',
 	'icon': 'icons/magic/air/fog-gas-smoke-swirling-green.webp',
@@ -39,16 +41,15 @@ let effectData = {
 				'cloudkill': {
 					'templateid': template.id,
 					'spellLevel': spellLevel,
-					'spelldc': spelldc
+					'spelldc': spelldc,
+					'inTemplates': inTemplates
 				}
 			}
 		}
 	}
 }
 let tokenList = template.flags.world.spell.cloudkill.tokenList;
-if (!tokenList.includes(token.id)) {
-	tokenList.push(token.id);
-}
+if (!tokenList.includes(token.id)) tokenList.push(token.id);
 template.setFlag('world', 'spell.cloudkill', {tokenList});
 let cloudEffect = token.actor.effects.find(eff => eff.label === 'Cloudkill');
 let addEffect = true;
@@ -67,6 +68,5 @@ if (cloudEffect) {
 }
 if (addEffect) {
 	await token.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
-	cloudEffect = token.actor.effects.find(eff => eff.label === 'Cloudkill');
 }
 if (doDamage) MidiQOL.doOverTimeEffect(token.actor, cloudEffect, true);
