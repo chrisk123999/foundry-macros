@@ -27,7 +27,7 @@ Hooks.on('midi-qol.preDamageRollComplete', async workflow => {
         if (flavor.toLowerCase() != 'healing' || isDeterministic === true) {
             newDamageRoll += oldDamageRoll.terms[i].formula;
         } else {
-            newDamageRoll += '(' + oldDamageRoll.terms[i].number + '*' + oldDamageRoll.terms[i].faces + ')[healing]';
+            newDamageRoll += '(' + oldDamageRoll.terms[i].number + '*' + oldDamageRoll.terms[i].faces + ')[Healing]';
         }
     }
     workflow.damageRoll = await new Roll(newDamageRoll).roll({async: true});
