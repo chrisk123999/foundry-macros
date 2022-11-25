@@ -17,5 +17,5 @@ if (game.combat != null && game.combat != undefined) {
 }
 if (doDamage) {
 	let effect = token.actor.effects.find(eff => eff.label === 'Cloudkill');
-	if (effect)	MidiQOL.doOverTimeEffect(token.actor, effect, true);
+	if (effect) MidiQOL.doOverTimeEffect(token.actor, effect, true);
 }
