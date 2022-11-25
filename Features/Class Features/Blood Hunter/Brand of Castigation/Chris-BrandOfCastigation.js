@@ -5,7 +5,6 @@ let featureToken = actor.flags.world?.feature?.bas?.tokenid;
 let applySelfDamage = false;
 let targetToken = args[0].workflow.hitTargets.first();
 if (!targetToken) return;
-console.log(targetToken);
 if (targetToken.id === featureToken) {
     applySelfDamage = true;
 } else {
