@@ -20,7 +20,7 @@ async function addEffect (actorUuid) {
 
 Hooks.on('midi-qol.preItemRoll', async workflow => {
     if (workflow.targets.size === 0) return;
-    if (workflow.item.system.save.dc === null) return;
+    if (workflow.item.system.save?.dc === null || workflow.item.system.save === undefined) return;
     if (workflow.item.effects.size === 0) return;
     let itemConditions = new Set();
     workflow.item.effects.forEach(effect => {
