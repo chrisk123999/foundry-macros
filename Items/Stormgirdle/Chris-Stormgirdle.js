@@ -1,0 +1,11 @@
+if (args[0].hitTargets.length != 1) return;
+if (args[0].item.type != 'weapon') return;
+let workflow = args[0].workflow;
+let oldDamageFormula = workflow.damageRoll._formula.toLowerCase();
+let newDamageFormula = oldDamageFormula.replace('bludgeoning', 'thunder');
+newDamageFormula = newDamageFormula.replace('slashing', 'lightning');
+newDamageFormula = newDamageFormula.replace('piercing', 'lightning');
+if (oldDamageFormula === newDamageFormula) return;
+workflow.damageRoll = await new Roll(newDamageFormula).roll({async: true});
+workflow.damageTotal = workflow.damageRoll.total;
+workflow.damageRollHTML = await workflow.damageRoll.render();

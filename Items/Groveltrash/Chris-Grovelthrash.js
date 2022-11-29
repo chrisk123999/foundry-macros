@@ -8,7 +8,7 @@ let damageDiceNum = 2;
 if (args[0].isCritical === true) damageDiceNum = damageDiceNum * 2;
 let damageDice = damageDiceNum + 'd6[bludgeoning]';
 let workflow = args[0].workflow;
-let damageFormula = workflow.damageRoll.formula + ' + ' + damageDice;
+let damageFormula = workflow.damageRoll._formula + ' + ' + damageDice;
 workflow.damageRoll = await new Roll(damageFormula).roll({async: true});
 workflow.damageTotal = workflow.damageRoll.total;
 workflow.damageRollHTML = await workflow.damageRoll.render();

@@ -113,9 +113,11 @@ if (arcanaCheck.total < arcanaDC) {
     let cleric = actor.classes.cleric;
     let sorcerer = actor.classes.sorcerer;
     let wizard = actor.classes.wizard;
+    if (actor.items.getName('Izzet Engineer')) classSelectionMenu.push(['Izzet League', 'izzet']);
     if (cleric) classSelectionMenu.push(['Cleric', 'cleric']);
     if (sorcerer) classSelectionMenu.push(['Sorcerer', 'sorcerer']);
     if (wizard) classSelectionMenu.push(['Wizard', 'wizard']);
+    if (actor.items.getName('Mark of Making Human')) classSelectionMenu.push(['Mark of Making', 'making']);
     if (classSelectionMenu.length === 0) return;
     if (classSelectionMenu.length > 1) selectionLevelMenu.unshift(['- Back -', 'back']);
     let selectedSpell = false;
@@ -178,6 +180,7 @@ if (arcanaCheck.total < arcanaDC) {
         }
     }
 }
+if (actor.items.getName(spellData.name)) return;
 let updates = {
     'embedded': {
         'Item': {
