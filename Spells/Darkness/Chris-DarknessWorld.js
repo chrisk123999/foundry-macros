@@ -1,4 +1,3 @@
-let devilsSight = 'Devil\'s Sight';
 Hooks.on('midi-qol.preAttackRoll', async workflow => {
     if (workflow.targets.size != 1) return;
 	let targetToken = workflow.targets.first().document;
@@ -32,12 +31,14 @@ Hooks.on('midi-qol.preAttackRoll', async workflow => {
 	let targetCanSeeSource = false;
 	let sourceActor = sourceToken.actor;
 	let targetActor = targetToken.actor;
-	let sourceDS = sourceActor.items.getName(devilsSight);
-	let targetDS = targetActor.items.getName(devilsSight);
+	let sourceDS = sourceActor.flags.world?.feature?.devilsight;
+	let targetDS = targetActor.flags.world?.feature?.devilsight;
 	let sourceSenses = sourceToken.actor.system.attributes.senses;
 	let targetSenses = targetToken.actor.system.attributes.senses;
 	if ((sourceDS && distance <= 120) || (sourceSenses.tremorsense >= distance) || (sourceSenses.blindsight >= distance) || (sourceSenses.truesight >= distance)) sourceCanSeeTarget = true;
 	if ((targetDS && distance <= 120) || (targetSenses.tremorsense >= distance) || (targetSenses.blindsight >= distance) || (targetSenses.truesight >= distance)) targetCanSeeSource = true;
+	console.log('Source see target: ' + (sourceCanSeeTarget || false));
+	console.log('Target see source: ' + (targetCanSeeSource || false));
 	if (sourceCanSeeTarget && targetCanSeeSource) return;
 	if (sourceCanSeeTarget && !targetCanSeeSource) workflow.advantage = true;
 	if (!sourceCanSeeTarget && targetCanSeeSource) {

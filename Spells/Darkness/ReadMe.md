@@ -10,4 +10,4 @@ Chris - Warpgate Menu Helper
 - Add "Item Macro.js" as an item macro to the darkness spell.  
 - Add "Chris-DarknessWorld.js" as a worldscripter macro.  
 # Notes  
-Actors with "Devil's Sight" must have the feature named exactly like that.  This includes actors with the "Devil's Sight" eldritch invocation.
+Actors with "Devil's Sight" must have a flag with the property of "flags.world.feature.devilsight | Overwrite | true".  This can be done with an effect via DAE.
