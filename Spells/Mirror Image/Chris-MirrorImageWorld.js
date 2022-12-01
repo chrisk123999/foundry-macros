@@ -1,8 +1,5 @@
-function updateEffect(tokenId, effectName, key, value) {
-    return game.macros.getName('Chris-UpdateEffect').execute(tokenId, effectName, key, value);
-}
-function deleteEffect(tokenId, effectName) {
-    return game.macros.getName('Chris-DeleteEffect').execute(tokenId, effectName);
+function updateEffect(tokenDoc, effectID, updates) {
+    return game.macros.getName('Chris-UpdateEffect').execute(tokenDoc, effectID, updates);
 }
 Hooks.on('midi-qol.AttackRollComplete', async workflow => {
     if (workflow.targets.size != 1) return;
@@ -38,13 +35,16 @@ Hooks.on('midi-qol.AttackRollComplete', async workflow => {
     workflow.isFumble = true;
     let duplicateAC = 10 + targetActor.system.abilities.dex.mod;
     if (workflow.attackTotal >= duplicateAC) {
-        await updateEffect(targetToken.id, 'Mirror Image', 1, duplicates - 1);
         ChatMessage.create({
             speaker: {alias: name},
             content: 'Attack hit a duplicate and destroyed it.'
         });
         if (duplicates === 1) {
-            await deleteEffect(targetToken.id, 'Mirror Image');
+			await MidiQOL.socket().executeAsGM('removeEffects', {actorUuid: targetActor.uuid, effects: [targetEffect.id]});
+        } else {
+            let changes = targetEffect.changes;
+            changes[1].value = duplicates - 1;
+            await updateEffect(targetToken.id, targetEffect.id, {changes});
         }
     } else {
         ChatMessage.create({
