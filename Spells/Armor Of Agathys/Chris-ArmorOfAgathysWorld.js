@@ -1,4 +1,4 @@
-Hooks.on('midi-qol.preDamageRoll', async workflow => {
+Hooks.on('midi-qol.RollComplete', async workflow => {
     if (workflow.hitTargets.size != 1) return;
     let targetToken = workflow.targets.first();
     if (!targetToken) return;
@@ -11,7 +11,10 @@ Hooks.on('midi-qol.preDamageRoll', async workflow => {
     let damage = targetActor.flags.world?.spell?.aoa;
     if (!damage) return;
     let tempHP = targetActor.system.attributes.hp.temp;
-    if (tempHP === 0) return;
+    if (tempHP === 0) {
+		await MidiQOL.socket().executeAsGM("removeEffects", {'actorUuid': targetActor.uuid, 'effects': [targetEffect.id]});
+		return;
+	}
     await MidiQOL.applyTokenDamage(
         [
             {
