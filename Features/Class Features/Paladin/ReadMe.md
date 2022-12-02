@@ -6,6 +6,6 @@ Warpgate
 # Macro Requirements  
 Chris - Warpgate Menu Helper  
 # Setup Instructions  
-- Import "fvtt-Macro-chris-divinesmite.json"  
+- Import "fvtt-Item-divine-smite.json"  
 - Make a hotbar macro and name it "Chris-DivineSmite" and configure ownership to "All Players: Observer."  
 - Copy the macro from "Chris-DivineSmite.js" into it.
