@@ -44,7 +44,7 @@ Hooks.on('midi-qol.RollComplete', async workflow => {
     for (let i=0; cleanUpList.length > i; i++) {
         let effect = cleanUpList[i].effects.find(eff => eff.label === 'Condition Advantage');
         if (!effect) continue;
-        MidiQOL.socket().executeAsGM('removeEffects', {'actorUuid': cleanUpList[i].uuid, effects: [effect.id]});
+        await MidiQOL.socket().executeAsGM('removeEffects', {'actorUuid': cleanUpList[i].uuid, 'effects': [effect.id]});
     }
     cleanUpList = [];
 });
