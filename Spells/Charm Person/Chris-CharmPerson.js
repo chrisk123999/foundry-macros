@@ -7,10 +7,10 @@ let effectData = {
 	},
 	'changes': [
 		{
-			'key': 'flags.midi-qol.magicResistance.all',
+			'key': 'flags.midi-qol.advantage.ability.save.all',
 			'value': '1',
-			'mode': 2,
-			'priority': 20
+			'mode': 5,
+			'priority': 120
 		}
 	],
 	'flags': {
