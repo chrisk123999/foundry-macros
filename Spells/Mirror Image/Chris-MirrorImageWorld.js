@@ -1,6 +1,3 @@
-function updateEffect(tokenDoc, effectID, updates) {
-    return game.macros.getName('Chris-UpdateEffect').execute(tokenDoc, effectID, updates);
-}
 Hooks.on('midi-qol.AttackRollComplete', async workflow => {
     if (workflow.targets.size != 1) return;
     if (workflow.isFumble === true) return;
@@ -40,11 +37,26 @@ Hooks.on('midi-qol.AttackRollComplete', async workflow => {
             content: 'Attack hit a duplicate and destroyed it.'
         });
         if (duplicates === 1) {
-			await MidiQOL.socket().executeAsGM('removeEffects', {actorUuid: targetActor.uuid, effects: [targetEffect.id]});
+			await MidiQOL.socket().executeAsGM('removeEffects', { actorUuid: targetActor.uuid, effects: [targetEffect.id]});
         } else {
-            let changes = targetEffect.changes;
-            changes[1].value = duplicates - 1;
-            await updateEffect(targetToken.id, targetEffect.id, {changes});
+            let updates = {
+                '_id': targetEffect.id,
+                'changes': [
+			        {
+				        'key': 'macro.tokenMagic',
+				        'mode': 0,
+				        'value': 'images',
+				        'priority': 20
+			        },
+			        {
+				        'key': 'flags.world.spell.mirrorimage',
+				        'mode': 5,
+				        'value': duplicates - 1,
+				        'priority': 20
+			        }
+		        ]
+            };
+            await MidiQOL.socket().executeAsGM('updateEffects', {'actorUuid': targetToken.actor.uuid, 'updates': [updates]});
         }
     } else {
         ChatMessage.create({

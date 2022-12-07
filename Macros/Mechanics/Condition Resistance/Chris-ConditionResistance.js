@@ -1,23 +1,22 @@
 let effectData = {
-	"label": "Condition Advantage",
-	"icon": "icons/magic/time/arrows-circling-green.webp",
-	"duration": {
-		"turns": 1
+	'label': 'Condition Advantage',
+	'icon': 'icons/magic/time/arrows-circling-green.webp',
+	'duration': {
+		'turns': 1
 	},
-	"changes": [
+	'changes': [
 		{
-			"key": "flags.midi-qol.magicResistance.all",
-			"value": "1",
-			"mode": 2,
-			"priority": 20
+			'key': 'flags.midi-qol.advantage.ability.save.all',
+			'value': '1',
+			'mode': 5,
+			'priority': 120
 		}
 	]
 };
 let cleanUpList = [];
-async function addEffect (actorUuid) {
-    await MidiQOL.socket().executeAsGM("createEffects", {'actorUuid': actorUuid, 'effects': [effectData]});
+async function addEffect(actorUuid) {
+    await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actorUuid, 'effects': [effectData]});
 }
-
 Hooks.on('midi-qol.preItemRoll', async workflow => {
     if (workflow.targets.size === 0) return;
     if (workflow.item.system.save?.dc === null || workflow.item.system.save === undefined) return;
@@ -45,7 +44,7 @@ Hooks.on('midi-qol.RollComplete', async workflow => {
     for (let i=0; cleanUpList.length > i; i++) {
         let effect = cleanUpList[i].effects.find(eff => eff.label === 'Condition Advantage');
         if (!effect) continue;
-        MidiQOL.socket().executeAsGM("removeEffects", {'actorUuid': cleanUpList[i].uuid, effects: [effect.id]});
+        MidiQOL.socket().executeAsGM('removeEffects', {'actorUuid': cleanUpList[i].uuid, effects: [effect.id]});
     }
     cleanUpList = [];
 });
