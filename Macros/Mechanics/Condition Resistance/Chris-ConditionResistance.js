@@ -14,9 +14,6 @@ let effectData = {
 	]
 };
 let cleanUpList = [];
-async function addEffect(actorUuid) {
-    await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actorUuid, 'effects': [effectData]});
-}
 Hooks.on('midi-qol.preItemRoll', async workflow => {
     if (workflow.targets.size === 0) return;
     if (workflow.item.system.save?.dc === null || workflow.item.system.save === undefined) return;
@@ -29,13 +26,13 @@ Hooks.on('midi-qol.preItemRoll', async workflow => {
     });
 //    console.log(itemConditions);
     if (itemConditions.size === 0) return;
-    workflow.targets.forEach(token5e => {
-//        console.log(token5e);
-        itemConditions.forEach(condition => {
-            if (token5e.document.actor.flags.world?.CR?.[condition] === 1) {
+    workflow.targets.forEach(tokenDoc => {
+//        console.log(tokenDoc);
+        itemConditions.forEach(async condition => {
+            if (tokenDoc.document.actor.flags.world?.CR?.[condition] === 1) {
 //                console.log('Adding advantage.');
-                addEffect(token5e.document.actor.uuid);
-                cleanUpList.push(token5e.document.actor);
+                await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': tokenDoc.document.actor.uuid, 'effects': [effectData]});
+                cleanUpList.push(tokenDoc.document.actor);
             }
         });
     });
