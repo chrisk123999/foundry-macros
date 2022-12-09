@@ -1,6 +1,16 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    }
+};
 let actor = args[0].actor;
 let spells = actor.system.spells;
 let highestSpellLevel = 0;
@@ -42,7 +52,7 @@ if (spells.spell9.max > 0) {
     highestSpellLevel = 9;
     levelMenu.push(['9th Level (DC: 28)', 9]);
 }
-let levelSelection = await showMenu('What level are you casting at?', levelMenu);
+let levelSelection = await chris.dialog('What level are you casting at?', levelMenu);
 if (levelSelection === undefined) return;
 switch (levelSelection) {
     case 9:
@@ -130,13 +140,13 @@ if (arcanaCheck.total < arcanaDC) {
         switch (selectedMenu) {
             case 'class selection':
                 if (classSelectionMenu.length === 1) classSelection = classSelectionMenu[0][1];
-                if (classSelection === '') classSelection = await showMenu('What spell list?', classSelectionMenu);
+                if (classSelection === '') classSelection = await chris.dialog('What spell list?', classSelectionMenu);
                 if (!classSelection) return;
                 selectedMenu = 'level selection';
                 break;
             case 'level selection':
                 if (selectionLevelMenu.length === 1) spellLevel = selectionLevelMenu[0][1];
-                if (spellLevel === -1) spellLevel = await showMenu('What is the spell\'s lowest level?', selectionLevelMenu);
+                if (spellLevel === -1) spellLevel = await chris.dialog('What is the spell\'s lowest level?', selectionLevelMenu);
                 if (!spellLevel) return;
                 if (spellLevel === 'back') {
                     spellLevel = -1;
@@ -162,7 +172,7 @@ if (arcanaCheck.total < arcanaDC) {
                     listMenu.push([packItems[i].name, i]);
                 }
                 if (rangeTop != packItems.length) listMenu.push(['- Next -', 'next']);
-                let spellKey = await showMenu('What spell?', listMenu);
+                let spellKey = await chris.dialog('What spell?', listMenu);
                 if (!(spellKey || spellKey === 0)) return;
                 if (spellKey === 'back') {
                     selectedMenu = 'level selection';

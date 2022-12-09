@@ -1,6 +1,16 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    }
+};
 let type = this.item.type;
 if (type != 'spell') return;
 let school = this.item.system.school;
@@ -19,7 +29,7 @@ if (level > 3 && missingThird > 0) menu.push(['3rd Level', 3]);
 if (level > 4 && missingFourth > 0) menu.push(['4th Level', 4]);
 if (level > 5 && missingFifth > 0) menu.push(['5th Level', 5]);
 if (menu.length === 0) return;
-let slot = await showMenu('What level spell slot do you want to regain?', menu);
+let slot = await chris.dialog('What level spell slot do you want to regain?', menu);
 if (!slot) return;
 let updateString = '';
 let updateValue = 0;

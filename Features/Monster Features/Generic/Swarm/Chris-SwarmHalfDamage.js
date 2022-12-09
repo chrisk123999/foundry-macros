@@ -1,0 +1,12 @@
+if (args[0].hitTargets.length != 1) return;
+let HP = args[0].actor.system.attributes.hp.value;
+let MaxHP = args[0].actor.system.attributes.hp.max;
+if (HP > (MaxHP / 2)) return;
+let workflow = args[0].workflow;
+let damageFormula = workflow.damageRoll._formula;
+let diceNum = Number(damageFormula.substring(0,1)) / 2;
+let restOfFormula = damageFormula.substring(1);
+let newFormula = diceNum + restOfFormula;
+workflow.damageRoll = await new Roll(newFormula).roll({async: true});
+workflow.damageTotal = workflow.damageRoll.total;
+workflow.damageRollHTML = await workflow.damageRoll.render();

@@ -1,6 +1,16 @@
-async function showMenu(title, options) {
-    return await game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    }
+};
 let actor = args[0].actor;
 let healingLightFeature = args[0].item;
 let targets = args[0].targets;
@@ -24,7 +34,7 @@ switch (diceLimit) {
         lightMenu.push(['1d6', 1]);
 }
 lightMenu.push(['Cancel', 0]);
-let diceNum = await showMenu('How many D6 dice do you want to use?', lightMenu) || 0;
+let diceNum = await chris.dialog('How many D6 dice do you want to use?', lightMenu) || 0;
 await item.update({
    'system.uses.value': healingLightFeatureUses - diceNum
 });

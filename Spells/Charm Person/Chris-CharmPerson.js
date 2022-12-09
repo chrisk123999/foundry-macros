@@ -1,3 +1,12 @@
+function chris = {
+    'createEffect': async function _createEffect(actor, effectData) {
+        if (game.user.isGM) {
+            await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
+        } else {
+            await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actor.uuid, 'effects': [effectData]});
+        }
+    }
+};
 if (args[0].targets.length === 0) return;
 let effectData = {
 	'label': 'Condition Advantage',
@@ -21,9 +30,6 @@ let effectData = {
 		}
 	}
 };
-async function addEffect (actorUuid) {
-    await MidiQOL.socket().executeAsGM("createEffects", {'actorUuid': actorUuid, 'effects': [effectData]});
-}
 for (let i = 0; args[0].targets.length > i; i++) {
-    await addEffect(args[0].targets[i].actor.uuid);
+    await chris.createEffect(args[0].targets[i].actor, effectData);
 }

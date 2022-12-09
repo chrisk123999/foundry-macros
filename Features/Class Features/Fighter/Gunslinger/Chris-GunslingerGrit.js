@@ -5,12 +5,9 @@ if (hitTargets.length != 1) return;
 let damageList = args[0][0].damageList;
 let newHP = damageList[0].newHP;
 let oldHP = damageList[0].oldHP;
-console.log(newHP);
-console.log(oldHP);
 if (newHP === 0 && newHP < oldHP) {
     killedTarget = true;
 }
-console.log(killedTarget);
 if (attackD20 === 20 || killedTarget) {
     let actor = args[0][0].actor;
     let gritFeature = actor.items.getName('Grit');

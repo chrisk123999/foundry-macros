@@ -1,10 +1,7 @@
 # Module Requirements  
-Advanced Macros  
 Dynamic Active Effects  
 Midi-Qol (and it's own associated requirements)  
-Warpgate  
-# Macro Requirements  
-Chris - Warpgate Menu Helper  
+Warpgate    
 # Setup Instructions  
 - Actor must have a feature called "Ki Points" that has uses.  
 - Make a hotbar macro and name it "Chris-FocusedAim" and configure ownership to "All Players: Observer."  

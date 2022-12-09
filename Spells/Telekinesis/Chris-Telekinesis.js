@@ -1,3 +1,12 @@
+function chris = {
+    'createEffect': async function _createEffect(actor, effectData) {
+        if (game.user.isGM) {
+            await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
+        } else {
+            await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actor.uuid, 'effects': [effectData]});
+        }
+    }
+};
 function rollContestedCheck(actor1, actor2, skill1, skill2) {
     return game.macros.getName('Chris-ContestedCheck').execute(actor1, actor2, skill1, skill2);
 }
@@ -24,4 +33,4 @@ let effectData = {
 		}
 	]
 };
-await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: targetActor.uuid, effects: [effectData]});
+await chris.createEffect(targetActor, effectData);

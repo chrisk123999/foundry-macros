@@ -1,6 +1,16 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    }
+};
 let actor = args[0].actor;
 let tokenDoc = args[0].workflow.token.document;
 if (!tokenDoc) return;
@@ -16,7 +26,7 @@ actor.items.forEach(item => {
 let selection;
 if (generatedMenu.length === 0) return;
 if (generatedMenu.length === 1) selection = generatedMenu[0][1];
-if (!selection) selection = await showMenu('What weapon?', generatedMenu);
+if (!selection) selection = await chris.dialog('What weapon?', generatedMenu);
 if (!selection) return;
 let riteMenu = [];
 if (actor.items.getName('Crimson Rite: Rite of the Flame')) riteMenu.push(['Rite of the Flame', 'fire']);
@@ -28,7 +38,7 @@ if (actor.items.getName('Crimson Rite: Rite of the Roar')) riteMenu.push(['Rite 
 let damageType;
 if (riteMenu.length === 0) return;
 if (riteMenu.length === 1) damageType = riteMenu[0][1];
-if (!damageType) damageType = await showMenu('What Crimson Rite?', riteMenu);
+if (!damageType) damageType = await chris.dialog('What Crimson Rite?', riteMenu);
 if (!damageType) return;
 let weaponData = actor.items.get(selection).toObject();
 weaponData.system.damage.parts.push([damageDice + '[' + damageType + ']', damageType]);

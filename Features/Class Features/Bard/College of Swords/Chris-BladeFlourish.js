@@ -1,19 +1,32 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    },
+    'findEffect': function _findEffect(actor, name) {
+        return actor.effects.find(eff => eff.label === name);
+    }
+};
 let actor = args[0].actor;
-let effect1 = actor.effects.find(eff => eff.label === 'Blade Flourish Movement');
+let effect1 = chris.findEffect(actor, 'BLade Flourish Movement');
 if (args[0].item.type === 'weapon' && !effect1) {
     let feature0 = actor.items.getName('Blade Flourish Movement');
 	if (feature0) feature0.roll();
 }
 if (args[0].item.type === 'weapon' && args[0].hitTargets.length === 1) {
-	let effect2 = actor.effects.find(eff => eff.label === 'Blade Flourish');
+	let effect2 = chris.findEffect(actor, 'Blade Flourish');
 	if (effect2) return;
     let bardicInspiration = actor.items.getName('Bardic Inspiration');
     let bardicInspirationUses = bardicInspiration.system.uses.value;
     if (bardicInspirationUses <= 0) return;
-    let selectedOption = await showMenu('Use a Blade Flourish?', [
+    let selectedOption = await chris.dialog('Use a Blade Flourish?', [
         ['Defensive Flourish', 'DF'],
         ['Mobile Flourish', 'MF'],
         ['Slashing Flourish', 'SF'],

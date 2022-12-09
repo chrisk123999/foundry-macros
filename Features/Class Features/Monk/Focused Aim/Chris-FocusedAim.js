@@ -1,6 +1,16 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    }
+};
 let feature = await token.actor.items.getName('Ki Points');
 if (!feature) return;
 let featureUses = feature.system.uses.value;
@@ -14,7 +24,7 @@ let featureMenu = [['Yes (1 Ki / +2 to hit)', 2]];
 if (featureUses >= 2) featureMenu.push(['Yes (2 Ki / +4 to hit)', 4]);
 if (featureUses >= 3) featureMenu.push(['Yes (3 Ki / +6 to hit)', 6]);
 featureMenu.push(['No', 0]);
-let useFeature = await showMenu('Attack roll (' + attackTotal + ') missed.  Use Focused Aim?', featureMenu);
+let useFeature = await chris.dialog('Attack roll (' + attackTotal + ') missed.  Use Focused Aim?', featureMenu);
 if (useFeature === 0) return;
 this.setAttackRoll(await new Roll(attackTotal + '+' + useFeature).evaluate({async: true}));
 await this.attackRoll.render();

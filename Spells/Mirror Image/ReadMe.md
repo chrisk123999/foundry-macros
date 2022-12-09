@@ -1,5 +1,4 @@
 # Module Requirements  
-Advanced Macros  
 Dynamic Active Effects  
 Midi-Qol (and it's own associated requirements)  
 World Scripter     

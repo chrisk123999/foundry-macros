@@ -1,10 +1,20 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    }
+};
 let actor = args[0].actor;
 let tokenDoc = args[0].workflow.token.document;
 if (!tokenDoc) return;
-let selected = await showMenu('What item?', [
+let selected = await chris.dialog('What item?', [
     ['Ale', false],
     ['Olive Oil', false],
     ['Potion of Healing (Normal)', 'Potion of Healing (Normal)'],

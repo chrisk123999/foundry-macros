@@ -1,10 +1,7 @@
 # Module Requirements  
-Advanced Macros  
 Dynamic Active Effects  
 Midi-Qol (and it's own associated requirements)  
 Warpgate  
-# Macro Requirements  
-Chris - Warpgate Menu Helper  
 # Setup Instructions  
 - Import all the json files as features and add them to the actor.  Do not rename any of them.  
 - Fill in the feature descriptions (If you use the DnD Beyond importer all of them except for "Blade Flourish Movement" should already exist on the actor but will need to be replaced)  
