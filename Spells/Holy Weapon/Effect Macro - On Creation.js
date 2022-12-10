@@ -152,15 +152,6 @@ let featureData = {
 				'sort': 0,
 				'ownership': {
 					'default': 0
-				},
-				'flags': {},
-				'_stats': {
-					'systemId': null,
-					'systemVersion': null,
-					'coreVersion': null,
-					'createdTime': null,
-					'modifiedTime': null,
-					'lastModifiedBy': null
 				}
 			}
 		},
