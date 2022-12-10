@@ -1,6 +1,16 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    }
+};
 if (args[0].hitTargets.length != 1) return;
 if (args[0].item.type != 'weapon') return;
 if (!(args[0].item.system.weaponType === 'martialM' || args[0].item.system.weaponType === 'simpleM')) return;
@@ -31,7 +41,7 @@ if (spell5 > 0) menuOptions.push(['8th Level', 8]);
 if (spell5 > 0) menuOptions.push(['9th Level', 9]);
 menuOptions.push(['No', 0]);
 let title = 'Use Divine Smite?';
-let selectedOption = await showMenu(title, menuOptions);
+let selectedOption = await chris.dialog(title, menuOptions);
 if (!selectedOption || selectedOption === 0) return;
 let update = {};
 let damageDiceNum;
@@ -90,7 +100,7 @@ if (type === 'undead' || type === 'fiend') damageDiceNum += 1;
 if (args[0].isCritical === true) damageDiceNum = damageDiceNum * 2;
 let damageDice = damageDiceNum + 'd8[radiant]';
 const workflow = MidiQOL.Workflow.getWorkflow(args[0].uuid);
-let damageFormula = workflow.damageRoll.formula + ' + ' + damageDice;
+let damageFormula = workflow.damageRoll._formula + ' + ' + damageDice;
 workflow.damageRoll = await new Roll(damageFormula).roll({async: true});
 workflow.damageTotal = workflow.damageRoll.total;
 workflow.damageRollHTML = await workflow.damageRoll.render();
