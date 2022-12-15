@@ -17,7 +17,7 @@ function chris = {
             await MidiQOL.socket().executeAsGM('updateEffects', {'actorUuid': effect.parent.uuid, 'updates': [updates]});
         }
     },
-    'addCondtion': async function _addCondition(actor, name, overlay, origin) {
+    'addCondition': async function _addCondition(actor, name, overlay, origin) {
         await game.dfreds.effectInterface.addEffect(
             {
                 'effectName': name,
@@ -27,7 +27,7 @@ function chris = {
             }
         );
     },
-    'removeCondtion': async function _removeCondition(actor, name) {
+    'removeCondition': async function _removeCondition(actor, name) {
         await game.dfreds.effectInterface.removeEffect(
             {
                 'effectName': name,
@@ -81,6 +81,6 @@ if (!targetEffect) {
 }
 let targetStrength = targetActor.system.abilities.str.value;
 if (targetStrength <= 0) {
-    await chris.removeCondtion(targetActor, 'Unconscious');
-    await chris.addCondtion(targetActor, 'Dead', true, null);
+    await chris.removeCondition(targetActor, 'Unconscious');
+    await chris.addCondition(targetActor, 'Dead', true, null);
 }
