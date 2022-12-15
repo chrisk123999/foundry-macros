@@ -35,7 +35,7 @@ window.chris = {
             await MidiQOL.socket().executeAsGM('updateEffects', {'actorUuid': effect.parent.uuid, 'updates': [updates]});
         }
     },
-    'addCondtion': async function _addCondition(actor, name, overlay, origin) {
+    'addCondition': async function _addCondition(actor, name, overlay, origin) {
         await game.dfreds.effectInterface.addEffect(
             {
                 'effectName': name,
@@ -45,7 +45,7 @@ window.chris = {
             }
         );
     },
-    'removeCondtion': async function _removeCondition(actor, name) {
+    'removeCondition': async function _removeCondition(actor, name) {
         await game.dfreds.effectInterface.removeEffect(
             {
                 'effectName': name,
