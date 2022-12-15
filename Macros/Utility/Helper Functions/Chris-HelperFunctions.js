@@ -89,5 +89,14 @@ window.chris = {
                 dispositionValue = null;
         }
         return MidiQOL.findNearby(dispositionValue, tokenDoc, range);
+    },
+    'addToRoll': async function _addToRoll(roll, addonFormula) {
+        let addonFormulaRoll = await new Roll('0 + ' + addonFormula).evaluate({async: true});
+        for (let i = 1; i < addonFormulaRoll.terms.length; i++) {
+            roll.terms.push(addonFormulaRoll.terms[i]);
+        }
+        roll._total += addonFormulaRoll.total;
+        roll._formula = roll._formula + ' + ' + addonFormula;
+        return roll;
     }
 };

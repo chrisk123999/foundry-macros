@@ -9,8 +9,18 @@ function chris = {
             'column'
         );
         return selected;
+    },
+    'addToRoll': async function _addToRoll(roll, addonFormula) {
+        let addonFormulaRoll = await new Roll('0 + ' + addonFormula).evaluate({async: true});
+        for (let i = 1; i < addonFormulaRoll.terms.length; i++) {
+            roll.terms.push(addonFormulaRoll.terms[i]);
+        }
+        roll._total += addonFormulaRoll.total;
+        roll._formula = roll._formula + ' + ' + addonFormula;
+        return roll;
     }
 };
+if (this.targets.size != 1 || this.isFumble) return;
 let feature = await token.actor.items.getName('Ki Points');
 if (!feature) return;
 let featureUses = feature.system.uses.value;
@@ -26,8 +36,8 @@ if (featureUses >= 3) featureMenu.push(['Yes (3 Ki / +6 to hit)', 6]);
 featureMenu.push(['No', 0]);
 let useFeature = await chris.dialog('Attack roll (' + attackTotal + ') missed.  Use Focused Aim?', featureMenu);
 if (useFeature === 0) return;
-this.setAttackRoll(await new Roll(attackTotal + '+' + useFeature).evaluate({async: true}));
-await this.attackRoll.render();
+let updatedRoll = await chris.addToRoll(this.attackRoll, useFeature);
+this.setAttackRoll(updatedRoll);
 let otherFeature = await token.actor.items.getName('Focused Aim');
 feature.update({'data.uses.value': featureUses - (useFeature / 2)});
-otherFeature.roll();
+await otherFeature.roll();
