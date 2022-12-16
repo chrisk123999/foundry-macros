@@ -39,5 +39,5 @@ if (useFeature === 0) return;
 let updatedRoll = await chris.addToRoll(this.attackRoll, useFeature);
 this.setAttackRoll(updatedRoll);
 let otherFeature = await token.actor.items.getName('Focused Aim');
-feature.update({'data.uses.value': featureUses - (useFeature / 2)});
+feature.update({'system.uses.value': featureUses - (useFeature / 2)});
 await otherFeature.roll();
