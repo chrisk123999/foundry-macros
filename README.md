@@ -1,6 +1,5 @@
 # Readme
 Macros and automations I've made for my own personal D&D games in Foundry (v10).  
-Most macros require my helper functions world script.  
 All folders contain a setup page explaining what modules or macros are needed.  
 I don't generally embed my Item Macros inside the items/features/spells they're used in. ¯\\\_(ツ)_/¯  
 
