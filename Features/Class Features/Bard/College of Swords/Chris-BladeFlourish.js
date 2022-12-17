@@ -1,3 +1,19 @@
+function chris = {
+    'dialog': async function _dialog(title, options) {
+        let buttons = options.map(([label,value]) => ({label,value}));
+        let selected = await warpgate.buttonDialog(
+            {
+                buttons,
+                title,
+            },
+            'column'
+        );
+        return selected;
+    },
+    'findEffect': function _findEffect(actor, name) {
+        return actor.effects.find(eff => eff.label === name);
+    }
+};
 let actor = args[0].actor;
 let effect1 = chris.findEffect(actor, 'BLade Flourish Movement');
 if (args[0].item.type === 'weapon' && !effect1) {
