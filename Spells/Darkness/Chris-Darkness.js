@@ -1,16 +1,3 @@
-function chris = {
-    'dialog': async function _dialog(title, options) {
-        let buttons = options.map(([label,value]) => ({label,value}));
-        let selected = await warpgate.buttonDialog(
-            {
-                buttons,
-                title,
-            },
-            'column'
-        );
-        return selected;
-    }
-};
 let template = canvas.scene.collections.templates.get(args[0].templateId);
 if (!template) return;
 attachToken = await chris.dialog('Attach to self?', [['Yes', true], ['No', false]]) || false;

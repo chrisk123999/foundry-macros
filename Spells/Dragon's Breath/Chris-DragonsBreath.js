@@ -1,16 +1,3 @@
-function chris = {
-    'dialog': async function _dialog(title, options) {
-        let buttons = options.map(([label,value]) => ({label,value}));
-        let selected = await warpgate.buttonDialog(
-            {
-                buttons,
-                title,
-            },
-            'column'
-        );
-        return selected;
-    }
-};
 if (args[0].targets.length != 1) return;
 let targetTokenID = args[0].targets[0].id;
 let spellLevel = args[0].castData.castLevel;

@@ -1,25 +1,3 @@
-function chris = {
-    'dialog': async function _dialog(title, options) {
-        let buttons = options.map(([label,value]) => ({label,value}));
-        let selected = await warpgate.buttonDialog(
-            {
-                buttons,
-                title,
-            },
-            'column'
-        );
-        return selected;
-    },
-    'addToRoll': async function _addToRoll(roll, addonFormula) {
-        let addonFormulaRoll = await new Roll('0 + ' + addonFormula).evaluate({async: true});
-        for (let i = 1; i < addonFormulaRoll.terms.length; i++) {
-            roll.terms.push(addonFormulaRoll.terms[i]);
-        }
-        roll._total += addonFormulaRoll.total;
-        roll._formula = roll._formula + ' + ' + addonFormula;
-        return roll;
-    }
-};
 if (this.targets.size != 1 || this.isFumble) return;
 let feature = await token.actor.items.getName('Ki Points');
 if (!feature) return;

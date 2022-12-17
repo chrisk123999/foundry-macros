@@ -1,16 +1,3 @@
-function chris = {
-    'dialog': async function _dialog(title, options) {
-        let buttons = options.map(([label,value]) => ({label,value}));
-        let selected = await warpgate.buttonDialog(
-            {
-                buttons,
-                title,
-            },
-            'column'
-        );
-        return selected;
-    }
-};
 let damageDice = '2d8[radiant]';
 let generatedMenu = [];
 let mutationStack = warpgate.mutationStack(token.document);

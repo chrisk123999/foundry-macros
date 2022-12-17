@@ -1,16 +1,3 @@
-function chris = {
-    'dialog': async function _dialog(title, options) {
-        let buttons = options.map(([label,value]) => ({label,value}));
-        let selected = await warpgate.buttonDialog(
-            {
-                buttons,
-                title,
-            },
-            'column'
-        );
-        return selected;
-    }
-};
 if (args[0].hitTargets.length != 1) return;
 if (args[0].item.type != 'weapon') return;
 if (!(args[0].item.system.weaponType === 'martialM' || args[0].item.system.weaponType === 'simpleM')) return;

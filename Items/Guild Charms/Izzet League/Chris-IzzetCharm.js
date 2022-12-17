@@ -1,16 +1,3 @@
-function chris = {
-    'dialog': async function _dialog(title, options) {
-        let buttons = options.map(([label,value]) => ({label,value}));
-        let selected = await warpgate.buttonDialog(
-            {
-                buttons,
-                title,
-            },
-            'column'
-        );
-        return selected;
-    }
-};
 let slot1Value = actor.system.spells.spell1.value;
 let slot1Max = actor.system.spells.spell1.max;
 let slot2Value = actor.system.spells.spell2.value;
