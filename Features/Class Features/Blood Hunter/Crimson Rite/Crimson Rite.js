@@ -1,4 +1,4 @@
-function chris = {
+let chris = {
     'dialog': async function _dialog(title, options) {
         let buttons = options.map(([label,value]) => ({label,value}));
         let selected = await warpgate.buttonDialog(

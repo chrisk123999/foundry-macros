@@ -1,4 +1,4 @@
-function chris = {
+let chris = {
     'applyDamage': async function _applyDamage(tokenList, damageValue, damageType) {
         let targets;
         if (Array.isArray(tokenList)) {

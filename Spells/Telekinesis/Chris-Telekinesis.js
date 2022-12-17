@@ -1,4 +1,4 @@
-function chris = {
+let chris = {
     'createEffect': async function _createEffect(actor, effectData) {
         if (game.user.isGM) {
             await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
