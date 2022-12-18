@@ -108,5 +108,34 @@ window.chris = {
             spellDC = item.parent.system.abilities[scaling].dc;
         }
         return spellDC;
+    },
+    'selectTarget': async function _selectTarget(title, buttons, targets) {
+        let generatedInputs = [];
+        let isFirst = true;
+        for (let i of targets) {
+            let name = i.document.name;
+            let texture = i.document.texture.src;
+            let html = `<img src="` + texture + `" style="width:40px;height:40px;vertical-align:middle;"><span> ` + name + `</span>`;
+            generatedInputs.push({
+                'label': html,
+                'type': 'radio',
+                'options': ['group1', isFirst],
+                'value': i.id
+            });
+            isFirst = false;
+        }
+        let config = {
+            'title': title,
+        };
+        return await warpgate.menu(
+            {
+                'inputs': generatedInputs,
+                'buttons': buttons
+            },
+            config
+        );
+    },
+    'checkTrait': function _checkTrait(actor, type, trait) {
+        return actor.system.traits[type].value.indexOf(trait) > -1;
     }
 };
