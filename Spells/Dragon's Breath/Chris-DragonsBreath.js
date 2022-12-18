@@ -9,12 +9,73 @@ let chris = {
             'column'
         );
         return selected;
+    },
+    'createEffect': async function _createEffect(actor, effectData) {
+        if (game.user.isGM) {
+            await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
+        } else {
+            await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actor.uuid, 'effects': [effectData]});
+        }
+    },
+    'getSpellDC': function _getSpellDC(item) {
+        let spellDC;
+        let scaling = item.system.save.scaling;
+        if (scaling === 'spell') {
+            spellDC = item.parent.system.attributes.spelldc;
+        } else {
+            spellDC = item.parent.system.abilities[scaling].dc;
+        }
+        return spellDC;
     }
 };
 if (args[0].targets.length != 1) return;
-let targetTokenID = args[0].targets[0].id;
+let targetToken = args[0].workflow.targets.first();
 let spellLevel = args[0].castData.castLevel;
-let spellDC = args[0].actor.system.attributes.spelldc;
+let spellDC = chris.getSpellDC(args[0].workflow.item);
 let damageType = await chris.dialog('What damage type?', [['🧪 Acid', 'acid'], ['❄️ Cold', 'cold'], ['🔥 Fire', 'fire'], ['⚡ Lightning', 'lightning'], ['☠️ Poison', 'poison']]);
-if (!damageType) return;
-game.macros.getName('Chris-DragonsBreathGM').execute(targetTokenID, spellLevel, damageType, spellDC);
+if (!damageType) damageType = 'fire';
+let packName = 'world.automated-spells';
+let pack = game.packs.get(packName);
+if (!pack) return;
+let packItems = await pack.getDocuments();
+if (packItems.length === 0) return;
+let itemData = packItems.find(item => item.name === 'Dragon Breath');
+if (!itemData) return;
+let itemObject = itemData.toObject();
+let diceNumber = spellLevel + 1;
+itemObject.system.damage.parts = [
+    [
+    diceNumber + 'd6[' + damageType + ']',
+    damageType
+    ]
+];
+itemObject.system.save.dc = spellDC;
+let updates = {
+    'embedded': {
+        'Item': {
+            [itemObject.name]: itemObject
+        }
+    }
+};
+let options = {
+    'permanent': false,
+    'name': itemObject.name,
+    'description': itemObject.name
+};
+await warpgate.mutate(targetToken.document, updates, {}, options);
+let effectData = {
+	'label': itemObject.name,
+	'icon': 'icons/magic/acid/projectile-smoke-glowing.webp',
+	'duration': {
+		'seconds': 60
+	},
+	'origin': args[0].item.uuid,
+	'flags': {
+		'effectmacro': {
+			'onDelete': {
+				'script': "warpgate.revert(token.document, '" + itemObject.name + "');"
+			}
+		},
+	}
+};
+await chris.createEffect(targetToken.actor, effectData);

@@ -98,5 +98,15 @@ window.chris = {
         roll._total += addonFormulaRoll.total;
         roll._formula = roll._formula + ' + ' + addonFormula;
         return roll;
+    },
+    'getSpellDC': function _getSpellDC(item) {
+        let spellDC;
+        let scaling = item.system.save.scaling;
+        if (scaling === 'spell') {
+            spellDC = item.parent.system.attributes.spelldc;
+        } else {
+            spellDC = item.parent.system.abilities[scaling].dc;
+        }
+        return spellDC;
     }
 };
