@@ -67,11 +67,11 @@ let effect = chris.findEffect(workflow.actor, 'Inspired');
 let bardDice = workflow.actor.system.scale?.bard['bardic-inspiration'];
 if (!bardDice) return;
 switch (pass) {
-    case 'postDamageRoll':
+    case 'preDamageApplication':
         if (!effect) return;
-		if (workflow.item.type != 'spell') return;
 		if ((workflow.item.system.actionType === 'msak' || workflow.item.system.actionType === 'rsak') && workflow.hitTargets.size === 0) return;
-        let buttons = [
+		if (workflow.item.type != 'spell') return;
+		let buttons = [
             {
                 'label': 'Yes',
                 'value': true
@@ -82,19 +82,9 @@ switch (pass) {
         ];
         let selection = await chris.selectTarget('Use Magical Inspiration?', buttons, targets);
         if (selection.buttons === false) return;
-        let selectedID = selection.inputs.find(id => id != false);
-        if (!selectedID) return;
-        let selectedToken = canvas.tokens.get(selectedID);
-        await effect.setFlag('world', 'feature.magicalInspiration', selectedID);
-        break;
-    case 'preDamageApplication':
-        if (!effect) return;
-		if ((workflow.item.system.actionType === 'msak' || workflow.item.system.actionType === 'rsak') && workflow.hitTargets.size === 0) return;
-		if (workflow.item.type != 'spell') return;
-        let targetTokenID = effect.flags.world?.feature?.magicalInspiration;
+        let targetTokenID = selection.inputs.find(id => id != false);
         if (!targetTokenID) return;
         let targetDamage = workflow.damageList.find(i => i.tokenId === targetTokenID);
-        await effect.unsetFlag('world', 'feature.magicalInspiration');
         let defaultDamageType = workflow.defaultDamageType;
         let roll = await new Roll(bardDice + '[' + defaultDamageType + ']').roll({async: true});
         roll.toMessage({
