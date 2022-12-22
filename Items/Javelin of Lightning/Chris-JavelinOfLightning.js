@@ -84,7 +84,7 @@ if (pass === 'postActiveEffects') {
         }
     };
     await chris.createEffect(sourceToken.actor, effectData2);
-    let templateMacro = game.modules.get("templatemacro").api;
+    let templateMacro = game.modules.get('templatemacro').api;
     let containedTokens = templateMacro.findContained(templateDoc);
     let targetTokens = [];
     for (let i of containedTokens) {
@@ -95,13 +95,15 @@ if (pass === 'postActiveEffects') {
         let areaSpellData = duplicate(workflow.item);
         delete(areaSpellData.effects);
         delete(areaSpellData.id);
-        delete(areaSpellData.flags["midi-qol"].onUseMacroName);
-        delete(areaSpellData.flags["midi-qol"].onUseMacroParts);
+        delete(areaSpellData.flags['midi-qol'].onUseMacroName);
+        delete(areaSpellData.flags['midi-qol'].onUseMacroParts);
         delete(areaSpellData.flags.itemacro);
         areaSpellData.name = 'Javelin of Lightning: Bolt';
         areaSpellData.system.damage.parts = [['4d6[lightning]', 'lightning']];
-        areaSpellData.system.actionType = "save";
-        areaSpellData.system.save.ability = "dex";
+        areaSpellData.system.actionType = 'save';
+        areaSpellData.system.save.ability = 'dex';
+		areaSpellData.system.save.dc = 13;
+		areaSpellData.system.save.scaling = 'flat';
         let areaSpell = new CONFIG.Item.documentClass(areaSpellData, {parent: workflow.actor});
         let options = {
             'showFullCard': false,
