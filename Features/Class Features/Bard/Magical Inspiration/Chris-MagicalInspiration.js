@@ -64,7 +64,12 @@ if (workflow.targets.size === 0) return;
 let pass = args[0].macroPass;
 let targets = workflow.targets;
 let effect = chris.findEffect(workflow.actor, 'Inspired');
-let bardDice = workflow.actor.system.scale?.bard['bardic-inspiration'];
+let bardDice;
+if (effect) {
+    let originItem = await fromUuid(effect.origin);
+    let originActor = originItem.parent;
+    bardDice = originActor.system.scale?.bard['bardic-inspiration'];
+}
 if (!bardDice) return;
 switch (pass) {
     case 'preDamageApplication':
