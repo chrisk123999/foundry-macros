@@ -12,7 +12,7 @@ let chris = {
     },
     'findEffect': function _findEffect(actor, name) {
         return actor.effects.find(eff => eff.label === name);
-    }
+    },
     'removeEffect': async function _removeEffect(effect) {
         if (game.user.isGM) {
             await effect.delete();
