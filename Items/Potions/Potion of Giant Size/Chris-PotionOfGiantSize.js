@@ -1,0 +1,10 @@
+if (this.targets.size != 1) return;
+let targetToken = this.targets.first();
+let targetActor = targetToken.actor;
+let effect = chris.findEffect(targetActor, 'Potion of Giant Size');
+if (!effect) return;
+let changes = effect.changes;
+changes[3].value = targetActor.system.attributes.hp.max * 2;
+let updates = {changes};
+await chris.updateEffect(effect, updates);
+await chris.applyDamage(targetToken, targetActor.system.attributes.hp.value * 2, 'healing');
