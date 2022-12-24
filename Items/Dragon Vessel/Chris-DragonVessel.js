@@ -11,8 +11,8 @@ let chris = {
         return selected;
     }
 };
-let actor = args[0].actor;
-let tokenDoc = args[0].workflow.token.document;
+let actor = this.actor;
+let tokenDoc = this.token.document;
 if (!tokenDoc) return;
 let selected = await chris.dialog('What item?', [
     ['Ale', false],
@@ -58,9 +58,7 @@ await warpgate.mutate(tokenDoc, updates, {}, options);
 let effectData = {
 	'label': itemData.name,
 	'icon': 'icons/containers/kitchenware/goblet-jeweled-red.webp',
-	'duration': {
-		'seconds': 604800
-	},
+	'origin': this.item.uuid,
 	'flags': {
 		'dae': {
 	        'specialDuration': [
@@ -73,7 +71,7 @@ let effectData = {
 			'onDelete': {
 				'script': "warpgate.revert(token.document, '" + itemData.name + "');"
 			}
-		},
+		}
 	}
 };
 await actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
