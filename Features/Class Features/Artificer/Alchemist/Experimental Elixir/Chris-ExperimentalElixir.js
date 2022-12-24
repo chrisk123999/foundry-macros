@@ -55,7 +55,7 @@ if (item) {
     await warpgate.mutate(tokenDoc, updates, {}, options);
     let effectData = {
 	    'label': 'Experimental Elixir - ' + itemData.name,
-	    'icon': 'icons/containers/kitchenware/goblet-jeweled-red.webp',
+	    'icon': 'icons/tools/laboratory/mortar-liquid-pink.webp',
 	    'origin': this.item.uuid,
 	    'flags': {
 		    'dae': {
