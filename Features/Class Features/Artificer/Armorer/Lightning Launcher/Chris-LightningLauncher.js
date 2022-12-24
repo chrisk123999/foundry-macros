@@ -1,7 +1,6 @@
 if (this.hitTargets.size != 1) return;
 if (this.isFumble) return;
 let item = this.item;
-if (item.name != 'Infiltrator Armor: Lightning Launcher') return;
 let doExtraDamage = false;
 if (game.combat === null || game.combat === undefined) {
     doExtraDamage = true;
