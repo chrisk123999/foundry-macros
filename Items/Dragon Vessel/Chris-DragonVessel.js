@@ -66,7 +66,7 @@ let effectData = {
 	        ],
 	        'stackable': 'multi',
 	        'macroRepeat': 'none'
-        },
+		},
 		'effectmacro': {
 			'onDelete': {
 				'script': "warpgate.revert(token.document, '" + itemData.name + "');"
