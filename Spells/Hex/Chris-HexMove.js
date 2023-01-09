@@ -1,3 +1,30 @@
+let chris = {
+    'findEffect': function _findEffect(actor, name) {
+        return actor.effects.find(eff => eff.label === name);
+    },
+    'createEffect': async function _createEffect(actor, effectData) {
+        if (game.user.isGM) {
+            await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
+        } else {
+            await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actor.uuid, 'effects': [effectData]});
+        }
+    },
+    'removeEffect': async function _removeEffect(effect) {
+        if (game.user.isGM) {
+            await effect.delete();
+        } else {
+            await MidiQOL.socket().executeAsGM('removeEffects', {'actorUuid': effect.parent.uuid, 'effects': [effect.id]});
+        }
+    },
+    'updateEffect': async function _updateEffect(effect, updates) {
+        if (game.user.isGM) {
+            await effect.update(updates);
+        } else {
+            updates._id = effect.id;
+            await MidiQOL.socket().executeAsGM('updateEffects', {'actorUuid': effect.parent.uuid, 'updates': [updates]});
+        }
+    }
+};
 let workflow = args[0].workflow;
 if (workflow.targets.size != 1) return;
 let actor = workflow.actor;
