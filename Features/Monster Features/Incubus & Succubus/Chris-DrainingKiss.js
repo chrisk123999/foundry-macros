@@ -8,7 +8,7 @@ let chris = {
         } else {
             await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actor.uuid, 'effects': [effectData]});
         }
-    }
+    },
     'updateEffect': async function _updateEffect(effect, updates) {
         if (game.user.isGM) {
             await effect.update(updates);
