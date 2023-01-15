@@ -28,10 +28,10 @@ let chris = {
         return spellDC;
     }
 };
-if (args[0].targets.length != 1) return;
-let targetToken = args[0].workflow.targets.first();
-let spellLevel = args[0].castData.castLevel;
-let spellDC = chris.getSpellDC(args[0].workflow.item);
+if (this.targets.size != 1) return;
+let targetToken = this.targets.first();
+let spellLevel = this.castData.castLevel;
+let spellDC = chris.getSpellDC(this.item);
 let damageType = await chris.dialog('What damage type?', [['🧪 Acid', 'acid'], ['❄️ Cold', 'cold'], ['🔥 Fire', 'fire'], ['⚡ Lightning', 'lightning'], ['☠️ Poison', 'poison']]);
 if (!damageType) damageType = 'fire';
 let packName = 'world.automated-spells';
@@ -45,8 +45,8 @@ let itemObject = itemData.toObject();
 let diceNumber = spellLevel + 1;
 itemObject.system.damage.parts = [
     [
-    diceNumber + 'd6[' + damageType + ']',
-    damageType
+		diceNumber + 'd6[' + damageType + ']',
+		damageType
     ]
 ];
 itemObject.system.save.dc = spellDC;
@@ -69,7 +69,7 @@ let effectData = {
 	'duration': {
 		'seconds': 60
 	},
-	'origin': args[0].item.uuid,
+	'origin': this.item.uuid,
 	'flags': {
 		'effectmacro': {
 			'onDelete': {
