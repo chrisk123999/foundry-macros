@@ -1,8 +1,12 @@
-let workflow = args[0].workflow;
-if (workflow.targets.size != 1) return;
-let targetToken = workflow.targets.first();
+let chris = {
+    'findEffect': function _findEffect(actor, name) {
+        return actor.effects.find(eff => eff.label === name);
+    }
+};
+if (this.targets.size != 1) return;
+let targetToken = this.targets.first();
 let targetActor = targetToken.actor;
-let damageFormula = workflow.damageRoll._formula;
+let damageFormula = this.damageRoll._formula;
 let skipHealing = false;
 if (chris.findEffect(targetActor, 'Healer Healing Healed')) {
     damageFormula = "0";
@@ -11,11 +15,9 @@ if (chris.findEffect(targetActor, 'Healer Healing Healed')) {
 if (targetActor.type === 'character' && !skipHealing) {
     let levels = 0;
     for (let i of Object.values(targetActor.classes)) {
-        console.log(i);
         levels += i.system.levels;
     }
     damageFormula = damageFormula + ' + ' + levels;
 }
-workflow.damageRoll = await new Roll(damageFormula).roll({async: true});
-workflow.damageTotal = workflow.damageRoll.total;
-workflow.damageRollHTML = await workflow.damageRoll.render();
+let damageRoll = await new Roll(damageFormula).roll({async: true});
+await this.setDamageRoll(damageRoll);
