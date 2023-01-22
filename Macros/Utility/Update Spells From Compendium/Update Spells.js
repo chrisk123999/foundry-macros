@@ -1,6 +1,6 @@
 let actorID = 'Uqfj6K84fvhdToVg';
 let dryRun = false;
-packKey = 'world.automated-spells';
+let packKey = 'world.automated-spells';
 
 let sourceActor = game.actors.get(actorID);
 if (!sourceActor) return;
