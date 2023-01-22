@@ -1,10 +1,10 @@
-let actorID = 'ENLZsXKAiCCu6Oe1';
+let actorID = 'Uqfj6K84fvhdToVg';
 let dryRun = false;
-
+packKey = 'world.automated-spells';
 
 let sourceActor = game.actors.get(actorID);
 if (!sourceActor) return;
-let gamePack = game.packs.get('world.automated-spells');
+let gamePack = game.packs.get(packKey);
 if (!gamePack) return;
 let packItems = await gamePack.getDocuments();
 function getSpell (spellName) {
@@ -23,15 +23,24 @@ for (let i = 0; itemSource.length > i; i++) {
     let spellID = getSpell(itemSource[i].name);
     if (spellID === -1) continue;
     let oldSpell = sourceActor.items.get(itemSource[i]._id);
-    console.log('Updating ' + itemSource[i].name);
+    ui.notifications.info('Updating ' + itemSource[i].name);
     if (!oldSpell) continue;
     let preparation = oldSpell.system.preparation;
     let uses = oldSpell.system.uses;
+    let activation = oldSpell.system.activation;
+    let fav = oldSpell.flags.favtab?.isFavorite;
     let updates = packItems[spellID].toObject();
     updates.system.preparation = preparation;
     updates.system.uses = uses;
-    if (dryRun) continue;
+    updates.system.activation = activation;
+    if (fav === true) updates.flags.favtab = {
+        'isFavorite': true
+    };
+    if (dryRun) {
+        console.log(updates);
+        continue;
+    }
     await oldSpell.update(updates);
     warpgate.wait(500);
 }
-console.log('Done updating spells.');
+ui.notifications.info('Done updating spells.');
