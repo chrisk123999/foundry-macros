@@ -11,15 +11,15 @@ let chris = {
         return selected;
     }
 };
-let actor = args[0].actor;
-let tokenDoc = args[0].workflow.token.document;
+let targetActor = this.actor;
+let tokenDoc = this.token.document;
 if (!tokenDoc) return;
-let damageDice = actor.system.scale['blood-hunter']['crimson-rite'];
+let damageDice = targetActor.system.scale['blood-hunter']['crimson-rite'];
 let generatedMenu = [];
 let mutationStack = warpgate.mutationStack(tokenDoc);
-actor.items.forEach(item => {
+targetActor.items.forEach(item => {
     if (item.type === 'weapon' && item.system.equipped === true) {
-        let mutateItem = mutationStack.getName('Crimson Rite: ' + item.name);
+        let mutateItem = mutationStack.getName('Crimson Rite: ' + item.id);
         if (!mutateItem) generatedMenu.push([item.name, item.id]);
     }
 });
@@ -29,32 +29,19 @@ if (generatedMenu.length === 1) selection = generatedMenu[0][1];
 if (!selection) selection = await chris.dialog('What weapon?', generatedMenu);
 if (!selection) return;
 let riteMenu = [];
-if (actor.items.getName('Crimson Rite: Rite of the Flame')) riteMenu.push(['Rite of the Flame', 'fire']);
-if (actor.items.getName('Crimson Rite: Rite of the Frozen')) riteMenu.push(['Rite of the Frozen', 'cold']);
-if (actor.items.getName('Crimson Rite: Rite of the Storm')) riteMenu.push(['Rite of the Storm', 'lightning']);
-if (actor.items.getName('Crimson Rite: Rite of the Dead')) riteMenu.push(['Rite of the Dead', 'necrotic']);
-if (actor.items.getName('Crimson Rite: Rite of the Oracle')) riteMenu.push(['Rite of the Oracle', 'psychic']);
-if (actor.items.getName('Crimson Rite: Rite of the Roar')) riteMenu.push(['Rite of the Roar', 'thunder']);
+if (targetActor.items.getName('Crimson Rite: Rite of the Flame')) riteMenu.push(['Rite of the Flame', 'fire']);
+if (targetActor.items.getName('Crimson Rite: Rite of the Frozen')) riteMenu.push(['Rite of the Frozen', 'cold']);
+if (targetActor.items.getName('Crimson Rite: Rite of the Storm')) riteMenu.push(['Rite of the Storm', 'lightning']);
+if (targetActor.items.getName('Crimson Rite: Rite of the Dead')) riteMenu.push(['Rite of the Dead', 'necrotic']);
+if (targetActor.items.getName('Crimson Rite: Rite of the Oracle')) riteMenu.push(['Rite of the Oracle', 'psychic']);
+if (targetActor.items.getName('Crimson Rite: Rite of the Roar')) riteMenu.push(['Rite of the Roar', 'thunder']);
 let damageType;
 if (riteMenu.length === 0) return;
 if (riteMenu.length === 1) damageType = riteMenu[0][1];
 if (!damageType) damageType = await chris.dialog('What Crimson Rite?', riteMenu);
 if (!damageType) return;
-let weaponData = actor.items.get(selection).toObject();
+let weaponData = targetActor.items.get(selection).toObject();
 weaponData.system.damage.parts.push([damageDice + '[' + damageType + ']', damageType]);
-let updates = {
-    'embedded': {
-        'Item': {
-            [weaponData.name]: weaponData
-        }
-    }
-};
-let options = {
-    'permanent': false,
-    'name': 'Crimson Rite: ' + weaponData.name,
-    'description': 'Crimson Rite: ' + weaponData.name
-};
-await warpgate.mutate(tokenDoc, updates, {}, options);
 let effectData = {
 	'label': 'Crimson Rite: ' + weaponData.name,
 	'icon': 'icons/skills/melee/strike-sword-blood-red.webp',
@@ -73,9 +60,24 @@ let effectData = {
         },
 		'effectmacro': {
 			'onDelete': {
-				'script': "warpgate.revert(token.document, '" + 'Crimson Rite: ' + weaponData.name + "');"
+				'script': "warpgate.revert(token.document, '" + 'Crimson Rite: ' + weaponData._id + "');"
 			}
 		},
 	}
 };
-await actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+let updates = {
+    'embedded': {
+        'Item': {
+            [weaponData.name]: weaponData
+        },
+        'ActiveEffect': {
+            ['Crimson Rite: ' + weaponData.name]: effectData
+        }
+    }
+};
+let options = {
+    'permanent': false,
+    'name': 'Crimson Rite: ' + weaponData._id,
+    'description': 'Crimson Rite: ' + weaponData.name
+};
+await warpgate.mutate(tokenDoc, updates, {}, options);
