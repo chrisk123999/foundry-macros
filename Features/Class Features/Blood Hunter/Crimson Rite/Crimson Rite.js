@@ -80,12 +80,12 @@ if (damageType === 'radiant') {
 		    'value': '20',
 		    'priority': 20
 	    },
-        {
-            'key': 'flags.midi-qol.onUseMacroName',
-            'mode': 0,
-            'value': 'Chris-RiteOfTheDawn,postDamageRoll',
-            'priority': 20
-        }
+		{
+			'key': 'flags.midi-qol.onUseMacroName',
+			'mode': 0,
+			'value': 'Chris-RiteOfTheDawn,postDamageRoll',
+			'priority': 20
+		}
     ];
     weaponData.flags.world = {
         'feature': {
