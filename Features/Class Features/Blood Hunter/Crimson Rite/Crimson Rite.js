@@ -35,6 +35,7 @@ if (targetActor.items.getName('Crimson Rite: Rite of the Storm')) riteMenu.push(
 if (targetActor.items.getName('Crimson Rite: Rite of the Dead')) riteMenu.push(['Rite of the Dead', 'necrotic']);
 if (targetActor.items.getName('Crimson Rite: Rite of the Oracle')) riteMenu.push(['Rite of the Oracle', 'psychic']);
 if (targetActor.items.getName('Crimson Rite: Rite of the Roar')) riteMenu.push(['Rite of the Roar', 'thunder']);
+if (targetActor.items.getName('Rite of the Dawn')) riteMenu.push(['Rite of the Dawn', 'radiant']);
 let damageType;
 if (riteMenu.length === 0) return;
 if (riteMenu.length === 1) damageType = riteMenu[0][1];
@@ -65,6 +66,33 @@ let effectData = {
 		},
 	}
 };
+if (damageType === 'radiant') {
+    effectData.changes = [
+	    {
+		    'key': 'system.traits.dr.value',
+		    'mode': 2,
+		    'value': 'necrotic',
+		    'priority': 20
+	    },
+	    {
+		    'key': 'ATL.light.bright',
+		    'mode': 4,
+		    'value': '20',
+		    'priority': 20
+	    },
+        {
+            'key': 'flags.midi-qol.onUseMacroName',
+            'mode': 0,
+            'value': 'Chris-RiteOfTheDawn,postDamageRoll',
+            'priority': 20
+        }
+    ];
+    weaponData.flags.world = {
+        'feature': {
+            'rotd': true
+        }
+    };
+}
 let updates = {
     'embedded': {
         'Item': {
