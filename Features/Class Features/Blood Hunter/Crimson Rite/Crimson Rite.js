@@ -68,18 +68,18 @@ let effectData = {
 };
 if (damageType === 'radiant') {
     effectData.changes = [
-	    {
-		    'key': 'system.traits.dr.value',
-		    'mode': 2,
-		    'value': 'necrotic',
-		    'priority': 20
-	    },
-	    {
-		    'key': 'ATL.light.bright',
-		    'mode': 4,
-		    'value': '20',
-		    'priority': 20
-	    },
+		{
+			'key': 'system.traits.dr.value',
+			'mode': 2,
+			'value': 'necrotic',
+			'priority': 20
+		},
+		{
+			'key': 'ATL.light.bright',
+			'mode': 4,
+			'value': '20',
+			'priority': 20
+		},
 		{
 			'key': 'flags.midi-qol.onUseMacroName',
 			'mode': 0,
