@@ -30,9 +30,9 @@ let weaponData = actor.items.get(selection).toObject();
 weaponData.system.damage.parts.push([damageDice, 'radiant']);
 let spellDC;
 if (origin.system.ability === '') {
-	spellDC = origin.parent.system.attributes.spelldc;
+	spellDC = origin.actor.system.attributes.spelldc;
 } else {
-	spellDC = origin.parent.system.abilities[origin.system.ability].dc;
+	spellDC = origin.actor.system.abilities[origin.system.ability].dc;
 }
 let pack = game.packs.get(packName);
 let packItems = await pack.getDocuments();
