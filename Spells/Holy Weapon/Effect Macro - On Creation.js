@@ -1,3 +1,4 @@
+let packName = 'world.automated-spells';
 let chris = {
     'dialog': async function _dialog(title, options) {
         let buttons = options.map(([label,value]) => ({label,value}));
@@ -33,7 +34,6 @@ if (origin.system.ability === '') {
 } else {
 	spellDC = origin.parent.system.abilities[origin.system.ability].dc;
 }
-let packName = 'world.automated-spells';
 let pack = game.packs.get(packName);
 let packItems = await pack.getDocuments();
 if (packItems.length === 0) return;

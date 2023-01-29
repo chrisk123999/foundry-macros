@@ -1,0 +1,225 @@
+{
+  "name": "Holy Weapon - Burst",
+  "type": "feat",
+  "img": "icons/magic/light/projectile-smoke-yellow.webp",
+  "system": {
+    "description": {
+      "value": "<p>Replace this description.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "",
+    "activation": {
+      "type": "bonus",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": 30,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": "",
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": "",
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": 0,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [
+        [
+          "4d8[radiant]",
+          "radiant"
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "con",
+      "dc": 10,
+      "scaling": "flat"
+    },
+    "requirements": "",
+    "recharge": {
+      "value": null,
+      "charged": false
+    }
+  },
+  "effects": [
+    {
+      "label": "Holy Weapon - Burst",
+      "icon": "icons/magic/light/projectile-smoke-yellow.webp",
+      "changes": [
+        {
+          "key": "flags.midi-qol.OverTime",
+          "mode": 0,
+          "value": "label=Holy Weapon - Burst (End of Turn),turn=end,saveDC=15,saveAbility=con,savingThrow=true,saveMagic=true,saveRemove=true",
+          "priority": 20
+        },
+        {
+          "key": "macro.CE",
+          "mode": 0,
+          "value": "Blinded",
+          "priority": 20
+        }
+      ],
+      "transfer": false,
+      "_id": "XuRLr1RfsMGophvq",
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "origin": null,
+      "tint": null,
+      "flags": {
+        "dae": {
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "stackable": "none",
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "core": {
+          "statusId": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "radius": null,
+          "alignment": "",
+          "type": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false
+        }
+      }
+    }
+  ],
+  "flags": {
+    "custom-character-sheet-sections": {
+      "sectionName": ""
+    },
+    "magicitems": {
+      "enabled": false,
+      "equipped": false,
+      "attuned": false,
+      "charges": "0",
+      "chargeType": "c1",
+      "destroy": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t1",
+      "rechargeUnit": "r1",
+      "sorting": "l"
+    },
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": true,
+      "autoFailFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": true,
+      "magiceffect": true,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "autoSaveFriendly": false
+    },
+    "core": {
+      "sourceId": "Item.cvHR0SNNhQl2nFv6"
+    },
+    "itemacro": {
+      "macro": {
+        "name": "Holy Weapon - Burst",
+        "type": "script",
+        "scope": "global",
+        "command": "let effect = args[0].actor.effects.find(eff => eff.label === 'Holy Weapon');\nif (!effect) return;\nawait effect.delete();\nawait chris.removeCondtion(args[0].actor, 'Concentrating');",
+        "author": "zqNQc5kF3CqkzwOD",
+        "_id": null,
+        "img": "icons/svg/dice-target.svg",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "cf": {
+      "id": "temp_8ooxry16i4m"
+    },
+    "favtab": {
+      "isFavorite": true
+    },
+    "exportSource": {
+      "world": "homebrew",
+      "system": "dnd5e",
+      "coreVersion": "10.291",
+      "systemVersion": "2.0.3"
+    }
+  },
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.0.3",
+    "coreVersion": "10.291",
+    "createdTime": 1670688209677,
+    "modifiedTime": 1674963448188,
+    "lastModifiedBy": "zqNQc5kF3CqkzwOD"
+  }
+}
