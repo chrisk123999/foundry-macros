@@ -36,9 +36,8 @@ let chris = {
         }
     }
 };
-let workflow = args[0].workflow;
-if (workflow.targets.size != 1) return;
-let targetToken = workflow.targets.first();
+if (this.size != 1) return;
+let targetToken = this.targets.first();
 let targetActor = targetToken.actor;
 let effect = chris.findEffect(targetActor, 'Hexed');
 if (effect) await chris.removeEffect(effect);
@@ -51,7 +50,7 @@ let selection = await chris.dialog('What ability should have disadvantage?', [
     ['Charisma', 'cha']
 ]);
 if (!selection) selection = 'str';
-let castLevel = workflow.castData.castLevel;
+let castLevel = this.castData.castLevel;
 let seconds;
 switch (castLevel) {
     case 3:
@@ -71,7 +70,7 @@ switch (castLevel) {
 let effectData = {
 	'label': 'Hexed',
 	'icon': 'icons/magic/perception/silhouette-stealth-shadow.webp',
-	'origin': args[0].item.uuid,
+	'origin': this.item.uuid,
 	'duration': {
 		'seconds': seconds
 	},
@@ -85,7 +84,7 @@ let effectData = {
 	]
 };
 await chris.createEffect(targetActor, effectData);
-let sourceActor = args[0].actor;
+let sourceActor = this.actor;
 let sourceEffect = chris.findEffect(sourceActor, 'Hex');
 if (!sourceEffect) return;
 let changes = sourceEffect.changes;
