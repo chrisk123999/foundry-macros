@@ -25,9 +25,8 @@ let chris = {
         }
     }
 };
-let workflow = args[0].workflow;
-if (workflow.targets.size != 1) return;
-let actor = workflow.actor;
+if (this.targets.size != 1) return;
+let actor = this.actor;
 let oldTargetTokenId = actor.flags.world?.spell?.hex;
 let oldTargetToken = canvas.scene.tokens.get(oldTargetTokenId);
 let oldTargetOrigin;
@@ -44,7 +43,7 @@ if (oldTargetToken) {
 let effect = chris.findEffect(actor, 'Hex');
 let duration = 3600;
 if (effect) duration = effect.duration.remaining;
-let targetToken = workflow.targets.first();
+let targetToken = this.targets.first();
 let targetActor = targetToken.actor;
 let effectData = {
 	'label': 'Hexed',
