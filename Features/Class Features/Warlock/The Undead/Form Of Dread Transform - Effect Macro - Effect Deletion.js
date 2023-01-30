@@ -1,0 +1,1 @@
+await origin.setFlag('world', 'feature.fod.turn', '');
