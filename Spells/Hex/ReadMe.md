@@ -4,6 +4,7 @@ Effect Macros
 Midi-Qol (and it's own associated requirements)  
 Warpgate  
 # Setup Instructions  
+- Create the hotbar script macro for "Chris-Hex" and "Chris-HexMove".  
 - Configure hex as pictured below:  
 ![Setup Hex](SetupHex.PNG)  
 - Configure the DAE on it as pictured below:  
