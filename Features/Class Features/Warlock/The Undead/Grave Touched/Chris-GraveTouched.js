@@ -45,7 +45,7 @@ for (let i = 0; oldDamageRoll.terms.length > i; i++) {
 	}
 }
 let damageFormula = newDamageRoll;
-let effect = chris.findEffect(this.actor, 'Form of Dread');
+let effect = chris.findEffect(this.actor, 'Form of Dread: Transform');
 if (effect) {
     let diceNum = 1;
     if (this.isCritical) diceNum = 2;
