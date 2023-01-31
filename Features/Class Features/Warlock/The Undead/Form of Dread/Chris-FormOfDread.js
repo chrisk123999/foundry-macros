@@ -23,11 +23,11 @@ if (game.combat === null || game.combat === undefined) {
 } else {
     if (this.token.id != game.combat.current.tokenId) return;
     currentTurn = game.combat.round + '-' + game.combat.turn;
-    let previousTurn = this.item.flags.world?.feature?.fod?.turn;
+    let previousTurn = feature.flags.world?.feature?.fod?.turn;
     if (!previousTurn || previousTurn != currentTurn) doCheck = true;
 }
 if (!doCheck) return;
 let selection = await chris.dialog('Attempt to fear target?', [['Yes', true], ['No', false]]);
 if (!selection) return;
-await this.item.setFlag('world', 'feature.fod.turn', currentTurn);
+await feature.setFlag('world', 'feature.fod.turn', currentTurn);
 await feature.roll();
