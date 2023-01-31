@@ -9,6 +9,9 @@ let chris = {
             'column'
         );
         return selected;
+    },
+	'findEffect': function _findEffect(actor, name) {
+        return actor.effects.find(eff => eff.label === name);
     }
 };
 if (this.hitTargets.size != 1) return;
@@ -36,14 +39,18 @@ for (let i = 0; oldDamageRoll.terms.length > i; i++) {
 	let flavor = oldDamageRoll.terms[i].flavor;
 	let isDeterministic = oldDamageRoll.terms[i].isDeterministic;
 	if (isDeterministic === true) {
-		newDamageRoll += oldDamageRoll.terms[i].formula;
+		newDamageRoll += oldDamageRoll.terms[i].expression;
 	} else {
 		newDamageRoll += oldDamageRoll.terms[i].number + 'd' + oldDamageRoll.terms[i].faces + '[necrotic]';
 	}
 }
-let diceNum = 1;
-if (this.isCritical) diceNum = 2;
-let extraDice = '+ ' + diceNum + 'd' + this.damageRoll.dice[0].faces + '[necrotic]';
-let damageFormula = newDamageRoll + extraDice;
+let damageFormula = newDamageRoll;
+let effect = chris.findEffect(this.actor, 'Form of Dread');
+if (effect) {
+    let diceNum = 1;
+    if (this.isCritical) diceNum = 2;
+    let extraDice = '+ ' + diceNum + 'd' + this.damageRoll.dice[0].faces + '[necrotic]';
+    damageFormula = newDamageRoll + extraDice;
+}
 let damageRoll = await new Roll(damageFormula).roll({async: true});
 await this.setDamageRoll(damageRoll);
