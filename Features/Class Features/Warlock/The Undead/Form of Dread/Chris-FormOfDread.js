@@ -15,9 +15,8 @@ if (this.hitTargets.size != 1) return;
 let validTypes = ['msak', 'rsak', 'mwak', 'rwak'];
 if (!validTypes.includes(this.item.system.actionType)) return;
 let feature = this.actor.items.getName('Form of Dread');
-if (!feature) return;
 let feature2 = this.actor.items.getName('Form of Dread: Transform');
-if (!feature2) return;
+if (!feature || !feature2) return;
 let currentTurn = '';
 let doCheck = false;
 if (game.combat === null || game.combat === undefined) {
