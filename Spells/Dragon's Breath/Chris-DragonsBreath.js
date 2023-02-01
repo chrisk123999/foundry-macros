@@ -64,7 +64,7 @@ let updates = {
             [itemObject.name]: itemObject
         },
         'ActiveEffect': {
-            ['Crimson Rite: ' + weaponData.name]: effectData
+            [itemObject.name]: effectData
         }
     }
 };
