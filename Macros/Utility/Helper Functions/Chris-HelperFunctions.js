@@ -103,9 +103,9 @@ window.chris = {
         let spellDC;
         let scaling = item.system.save.scaling;
         if (scaling === 'spell') {
-            spellDC = item.parent.system.attributes.spelldc;
+            spellDC = item.actor.system.attributes.spelldc;
         } else {
-            spellDC = item.parent.system.abilities[scaling].dc;
+            spellDC = item.actor.system.abilities[scaling].dc;
         }
         return spellDC;
     },
