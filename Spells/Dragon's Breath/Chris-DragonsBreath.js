@@ -10,13 +10,6 @@ let chris = {
         );
         return selected;
     },
-    'createEffect': async function _createEffect(actor, effectData) {
-        if (game.user.isGM) {
-            await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
-        } else {
-            await MidiQOL.socket().executeAsGM('createEffects', {'actorUuid': actor.uuid, 'effects': [effectData]});
-        }
-    },
     'getSpellDC': function _getSpellDC(item) {
         let spellDC;
         let scaling = item.system.save.scaling;
@@ -50,19 +43,6 @@ itemObject.system.damage.parts = [
     ]
 ];
 itemObject.system.save.dc = spellDC;
-let updates = {
-    'embedded': {
-        'Item': {
-            [itemObject.name]: itemObject
-        }
-    }
-};
-let options = {
-    'permanent': false,
-    'name': itemObject.name,
-    'description': itemObject.name
-};
-await warpgate.mutate(targetToken.document, updates, {}, options);
 let effectData = {
 	'label': itemObject.name,
 	'icon': 'icons/magic/acid/projectile-smoke-glowing.webp',
@@ -78,4 +58,19 @@ let effectData = {
 		},
 	}
 };
-await chris.createEffect(targetToken.actor, effectData);
+let updates = {
+    'embedded': {
+        'Item': {
+            [itemObject.name]: itemObject
+        },
+        'ActiveEffect': {
+            ['Crimson Rite: ' + weaponData.name]: effectData
+        }
+    }
+};
+let options = {
+    'permanent': false,
+    'name': itemObject.name,
+    'description': itemObject.name
+};
+await warpgate.mutate(targetToken.document, updates, {}, options);
