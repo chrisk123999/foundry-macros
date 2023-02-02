@@ -109,18 +109,20 @@ window.chris = {
         }
         return spellDC;
     },
-    'selectTarget': async function _selectTarget(title, buttons, targets) {
+    'selectTarget': async function _selectTarget(title, buttons, targets, returnUuid) {
         let generatedInputs = [];
         let isFirst = true;
         for (let i of targets) {
             let name = i.document.name;
             let texture = i.document.texture.src;
             let html = `<img src="` + texture + `" style="width:40px;height:40px;vertical-align:middle;"><span> ` + name + `</span>`;
+            let value = i.id;
+            if (returnUuid) value = i.document.uuid;
             generatedInputs.push({
                 'label': html,
                 'type': 'radio',
                 'options': ['group1', isFirst],
-                'value': i.id
+                'value': value
             });
             isFirst = false;
         }
