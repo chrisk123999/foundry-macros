@@ -20,7 +20,7 @@ let chris = {
         let generatedInputs = [];
         let isFirst = true;
         for (let i of targets) {
-            let name = i.document.name.slice(0, 24);
+            let name = i.document.name;
             let texture = i.document.texture.src;
             let html = `<img src="` + texture + `" style="width:40px;height:40px;vertical-align:middle;"><span> ` + name + `</span>`;
             let value = i.id;
@@ -33,8 +33,18 @@ let chris = {
             });
             isFirst = false;
         }
+        function dialogRender() {
+            let ths = document.querySelector('.dialog-content').getElementsByTagName('th');
+            for (let t of ths) {
+                t.style.width = "auto";
+                t.style.textAlign = "left";
+            }
+            let tds = document.querySelector('.dialog-content').getElementsByTagName('td');
+            for (let t of tds) t.style.width = "50px";
+        }
         let config = {
             'title': title,
+            'render': dialogRender
         };
         return await warpgate.menu(
             {
@@ -127,4 +137,4 @@ let options = {
     'consumeResource': false,
     'consumeSlot': false,
 };
-await MidiQOL.completeItemRoll(weaponAttack, options);
+await MidiQOL.completeItemUse(weaponAttack, {}, options);
