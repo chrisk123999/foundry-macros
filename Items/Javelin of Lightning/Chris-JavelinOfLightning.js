@@ -114,7 +114,7 @@ if (pass === 'postActiveEffects') {
             'consumeResource': false,
             'consumeSlot': false,
         };
-        await MidiQOL.completeItemRoll(areaSpell, options);
+        await MidiQOL.completeItemUse(areaSpell, {}, options);
     }
 } else if (pass === 'postDamageRoll') {
     if (!item.flags.world?.useBolt) return;

@@ -56,6 +56,6 @@ let options = {
     'consumeResource': false,
     'consumeSlot': false,
 };
-if (dexSaves.length > 0) await MidiQOL.completeItemRoll(areaFeature, options);
+if (dexSaves.length > 0) await MidiQOL.completeItemUse(areaFeature, {}, options);
 options.targetUuids = strSaves;
-if (strSaves.length > 0) await MidiQOL.completeItemRoll(areaFeature2, options);
+if (strSaves.length > 0) await MidiQOL.completeItemUse(areaFeature2, {}, options);

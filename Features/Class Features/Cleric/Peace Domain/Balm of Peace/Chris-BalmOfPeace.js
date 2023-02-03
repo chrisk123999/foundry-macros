@@ -19,5 +19,5 @@ for (let targetToken of this.targets.values()) {
         'consumeResource': false,
         'consumeSlot': false,
     };
-    await MidiQOL.completeItemRoll(areaSpell, options);
+    await MidiQOL.completeItemUse(areaSpell, {}, options);
 }
