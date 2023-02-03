@@ -4,7 +4,7 @@
   "img": "icons/magic/light/projectile-smoke-yellow.webp",
   "system": {
     "description": {
-      "value": "<p>Replace this description.</p>",
+      "value": "<p>Replace this.</p>",
       "chat": "",
       "unidentified": ""
     },
@@ -181,7 +181,7 @@
         "name": "Holy Weapon - Burst",
         "type": "script",
         "scope": "global",
-        "command": "let effect = args[0].actor.effects.find(eff => eff.label === 'Holy Weapon');\nif (!effect) return;\nawait effect.delete();\nawait chris.removeCondtion(args[0].actor, 'Concentrating');",
+        "command": "let chris = {\n    'removeCondition': async function _removeCondition(actor, name) {\n        await game.dfreds.effectInterface.removeEffect(\n            {\n                'effectName': name,\n                'uuid': actor.uuid\n            }\n        );\n};\nlet effect = this.actor.effects.find(eff => eff.label === 'Holy Weapon');\nif (!effect) return;\nawait effect.delete();\nawait chris.removeCondtion(args[0].actor, 'Concentrating');",
         "author": "zqNQc5kF3CqkzwOD",
         "_id": null,
         "img": "icons/svg/dice-target.svg",
@@ -219,7 +219,7 @@
     "systemVersion": "2.0.3",
     "coreVersion": "10.291",
     "createdTime": 1670688209677,
-    "modifiedTime": 1674963448188,
+    "modifiedTime": 1675446713229,
     "lastModifiedBy": "zqNQc5kF3CqkzwOD"
   }
 }
