@@ -113,7 +113,7 @@ window.chris = {
         let generatedInputs = [];
         let isFirst = true;
         for (let i of targets) {
-            let name = i.document.name;
+            let name = i.document.name.slice(0, 24);
             let texture = i.document.texture.src;
             let html = `<img src="` + texture + `" style="width:40px;height:40px;vertical-align:middle;"><span> ` + name + `</span>`;
             let value = i.id;
