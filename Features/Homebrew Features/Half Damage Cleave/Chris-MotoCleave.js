@@ -22,7 +22,7 @@ let chris = {
         for (let i of targets) {
             let name = i.document.name;
             let texture = i.document.texture.src;
-            let html = `<img src="` + texture + `" style="width:40px;height:40px;vertical-align:middle;"><span> ` + name + `</span>`;
+			let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span>` + name + `</span>`;
             let value = i.id;
             if (returnUuid) value = i.document.uuid;
             generatedInputs.push({
@@ -33,14 +33,43 @@ let chris = {
             });
             isFirst = false;
         }
-        function dialogRender() {
-            let ths = document.querySelector('.dialog-content').getElementsByTagName('th');
-            for (let t of ths) {
-                t.style.width = "auto";
-                t.style.textAlign = "left";
-            }
-            let tds = document.querySelector('.dialog-content').getElementsByTagName('td');
-            for (let t of tds) t.style.width = "50px";
+        function dialogRender(html) {
+  			let trs = html[0].getElementsByTagName('tr');
+  			for (let t of trs) {
+  				t.style.display = 'flex';
+  				t.style.flexFlow = 'row-reverse';
+  				t.style.alignItems = 'center';
+  				t.style.justifyContent = 'flex-end';
+  				t.addEventListener('click', function () {t.getElementsByTagName('input')[0].checked = true});
+  			}
+  			let ths = html[0].getElementsByTagName('th');
+  			for (let t of ths) {
+  				t.style.width = 'auto';
+  				t.style.textAlign = 'left';
+  			}
+  			let tds = html[0].getElementsByTagName('td');
+  			for (let t of tds) {
+  				t.style.width = '50px';
+  				t.style.textAlign = 'center';
+  				t.style.paddingRight = '5px';
+  			}
+  			let imgs = html[0].getElementsByTagName('img');
+  			for (let i of imgs) {
+  				i.style.border = 'none';
+  				i.addEventListener('click', async function () {
+  					await canvas.ping(canvas.tokens.get(i.getAttribute('id')).document.object.center);
+  				});
+  				i.addEventListener('mouseover', function () {
+  					let targetToken = canvas.tokens.get(i.getAttribute('id'));
+  					targetToken.hover = true;
+  					targetToken.refresh();
+  				});          
+  				i.addEventListener('mouseout', function () {
+  					let targetToken = canvas.tokens.get(i.getAttribute('id'));
+  					targetToken.hover = false;
+  					targetToken.refresh();
+  				});       
+  			}
         }
         let config = {
             'title': title,
@@ -53,6 +82,9 @@ let chris = {
             },
             config
         );
+    },
+    'checkTrait': function _checkTrait(actor, type, trait) {
+        return actor.system.traits[type].value.indexOf(trait) > -1;
     }
 };
 if (this.hitTargets.size != 1) return;
