@@ -21,7 +21,7 @@ let chris = {
         let isFirst = true;
 		let j = 0;
         for (let i of targets) {
-			j ++ 1;
+			j += 1;
             let name = i.document.name;
             let texture = i.document.texture.src;
 			let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span>Target: ` + j + `</span>`;
