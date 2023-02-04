@@ -40,4 +40,4 @@ let changes = effect.changes;
 changes[3].value = targetActor.system.attributes.hp.max * 2;
 let updates = {changes};
 await chris.updateEffect(effect, updates);
-await chris.applyDamage(targetToken, targetActor.system.attributes.hp.value * 2, 'healing');
+await chris.applyDamage(targetToken, targetActor.system.attributes.hp.value, 'healing');
