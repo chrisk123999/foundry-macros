@@ -10,6 +10,25 @@ window.chris = {
         );
         return selected;
     },
+    'numberDialog': async function _numberDialog(title, buttons, options) {
+        let inputs = [];
+        for (let i of options) {
+            inputs.push({
+                'label': i,
+                'type': 'number'
+            });
+        }
+        let config = {
+            'title': title
+        };
+        return await warpgate.menu(
+            {
+                'inputs': inputs,
+                'buttons': buttons
+            },
+            config
+        );
+    },
     'findEffect': function _findEffect(actor, name) {
         return actor.effects.find(eff => eff.label === name);
     },
@@ -109,13 +128,23 @@ window.chris = {
         }
         return spellDC;
     },
+    'getSpellMod': function _getSpellMod(item) {
+        let spellMod;
+        let scaling = item.system.save.scaling;
+        if (scaling === 'spell') {
+            spellMod = item.actor.system.abilities[item.actor.system.attributes.spellcasting].mod;
+        } else {
+            spellMod = item.actor.system.abilities[scaling].mod;
+        }
+        return spellMod;
+    },
     'selectTarget': async function _selectTarget(title, buttons, targets, returnUuid) {
         let generatedInputs = [];
         let isFirst = true;
         for (let i of targets) {
             let name = i.document.name;
             let texture = i.document.texture.src;
-            let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span>` + name + `</span>`;
+			let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span>` + name + `</span>`;
             let value = i.id;
             if (returnUuid) value = i.document.uuid;
             generatedInputs.push({
@@ -127,42 +156,42 @@ window.chris = {
             isFirst = false;
         }
         function dialogRender(html) {
-            let trs = html[0].getElementsByTagName('tr');
-            for (let t of trs) {
-                t.style.display = 'flex';
-                t.style.flexFlow = 'row-reverse';
-                t.style.alignItems = 'center';
-                t.style.justifyContent = 'flex-end';
-                t.addEventListener('click', function () {t.getElementsByTagName('input')[0].checked = true});
-            }
-            let ths = html[0].getElementsByTagName('th');
-            for (let t of ths) {
-                t.style.width = 'auto';
-                t.style.textAlign = 'left';
-            }
-            let tds = html[0].getElementsByTagName('td');
-            for (let t of tds) {
-                t.style.width = '50px';
-                t.style.textAlign = 'center';
-                t.style.paddingRight = '5px';
-            }
-            let imgs = html[0].getElementsByTagName('img');
-            for (let i of imgs) {
-                i.style.border = 'none';
-                i.addEventListener('click', async function () {
-                    await canvas.ping(canvas.tokens.get(i.getAttribute('id')).document.object.center);
-                });
-                i.addEventListener('mouseover', function () {
-                    let targetToken = canvas.tokens.get(i.getAttribute('id'));
-                    targetToken.hover = true;
-                    targetToken.refresh();
-                });
-                i.addEventListener('mouseout', function () {
-                    let targetToken = canvas.tokens.get(i.getAttribute('id'));
-                    targetToken.hover = false;
-                    targetToken.refresh();
-                });
-            }
+			let trs = html[0].getElementsByTagName('tr');
+			for (let t of trs) {
+				t.style.display = 'flex';
+				t.style.flexFlow = 'row-reverse';
+				t.style.alignItems = 'center';
+				t.style.justifyContent = 'flex-end';
+				t.addEventListener('click', function () {t.getElementsByTagName('input')[0].checked = true});
+			}
+			let ths = html[0].getElementsByTagName('th');
+			for (let t of ths) {
+				t.style.width = 'auto';
+				t.style.textAlign = 'left';
+			}
+			let tds = html[0].getElementsByTagName('td');
+			for (let t of tds) {
+				t.style.width = '50px';
+				t.style.textAlign = 'center';
+				t.style.paddingRight = '5px';
+			}
+			let imgs = html[0].getElementsByTagName('img');
+			for (let i of imgs) {
+				i.style.border = 'none';
+				i.addEventListener('click', async function () {
+					await canvas.ping(canvas.tokens.get(i.getAttribute('id')).document.object.center);
+				});
+				i.addEventListener('mouseover', function () {
+					let targetToken = canvas.tokens.get(i.getAttribute('id'));
+					targetToken.hover = true;
+					targetToken.refresh();
+				});          
+				i.addEventListener('mouseout', function () {
+					let targetToken = canvas.tokens.get(i.getAttribute('id'));
+					targetToken.hover = false;
+					targetToken.refresh();
+				});       
+			}
         }
         let config = {
             'title': title,
@@ -178,5 +207,8 @@ window.chris = {
     },
     'checkTrait': function _checkTrait(actor, type, trait) {
         return actor.system.traits[type].value.indexOf(trait) > -1;
+    },
+    'functionToString': function _functiongToString(input) {
+        return `(${input.toString()})()`;
     }
 };
