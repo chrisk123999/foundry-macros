@@ -24,7 +24,7 @@ let chris = {
 			j += 1;
             let name = i.document.name;
             let texture = i.document.texture.src;
-			let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span>Target: ` + j + `</span>`;
+			let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span> Target: ` + j + `</span>`;
             let value = i.id;
             if (returnUuid) value = i.document.uuid;
             generatedInputs.push({

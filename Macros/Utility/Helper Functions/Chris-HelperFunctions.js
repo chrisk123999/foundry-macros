@@ -144,7 +144,7 @@ window.chris = {
         for (let i of targets) {
             let name = i.document.name;
             let texture = i.document.texture.src;
-			let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span>` + name + `</span>`;
+			let html = `<img src="` + texture + `" id="` + i.id + `" style="width:40px;height:40px;vertical-align:middle;"><span> ` + name + `</span>`;
             let value = i.id;
             if (returnUuid) value = i.document.uuid;
             generatedInputs.push({
