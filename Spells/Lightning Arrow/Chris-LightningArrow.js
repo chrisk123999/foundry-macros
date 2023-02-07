@@ -50,12 +50,18 @@ let chris = {
 		}
 		return spellDC;
 	},
-	'getItemFromCompendium': async function _getItemFromCompendium(key, name) {
+	'getItemFromCompendium': async function _getItemFromCompendium(key, name, ignoreNotFound) {
 		let gamePack = game.packs.get(key);
-		if (!gamePack) return false;
+		if (!gamePack) {
+			ui.notifications.warn('Invalid compendium specified!');
+			return false;
+		}
 		let packItems = await gamePack.getDocuments();
 		let itemData = packItems.find(item => item.name === name);
-		if (!itemData) return false;
+		if (!itemData) {
+			if (!ignoreNotFound) ui.notifications.warn('Item not found in specified compendium! Check spelling?');
+			return false;
+		}
 		return itemData.toObject();
 	}
 };
