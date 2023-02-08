@@ -67,10 +67,15 @@ let chris = {
 };
 if (this.targets.size != 1) return;
 let targetToken = this.targets.first();
-if (!(this.item.system.properties.thr || this.item.system.actionType === 'rwak')) return;
+if (!(this.item.system.properties?.thr || this.item.system.actionType === 'rwak')) return;
 let diceNumber = 4;
 if (this.isCritical) diceNumber = 8;
-let modifier = this.actor.system.abilities[this.item.system.ability].mod;
+let itemAbility = this.item.system.ability;
+if (itemAbility === '') {
+	itemAbility = 'str';
+	if (this.item.system.properties?.fin && this.actor.system.abilities.dex.mod > this.actor.system.abilities.str) itemAbility = 'dex';
+}
+let modifier = this.actor.system.abilities[itemAbility].mod;
 let damageFormula = diceNumber + 'd8[lightning] + ' + modifier;
 let effect = chris.findEffect(this.actor, 'Lightning Arrow');
 let castLevel = 3;
@@ -101,8 +106,9 @@ if (effect) {
 }
 let areaFeature = new CONFIG.Item.documentClass(itemData, {parent: this.actor});
 let newTargets = chris.findNearby(targetToken, 10, null);
-for (let newTarget of newTargets) {
-	new Sequence().effect().atLocation(targetToken).stretchTo(newTarget).file('jb2a.chain_lightning.secondary.blue').play();
+new Sequence().effect().atLocation(this.token).stretchTo(targetToken).file('jb2a.chain_lightning.secondary.blue').play();
+for (let i of newTargets) {
+	new Sequence().effect().atLocation(targetToken).stretchTo(i).file('jb2a.chain_lightning.secondary.blue').play();
 }
 newTargets.push(targetToken);
 let newTargetUuids =[];
