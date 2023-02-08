@@ -36,7 +36,7 @@ let chris = {
         }
     }
 };
-if (this.size != 1) return;
+if (this.targets.size != 1) return;
 let targetToken = this.targets.first();
 let targetActor = targetToken.actor;
 let effect = chris.findEffect(targetActor, 'Hexed');
