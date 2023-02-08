@@ -101,6 +101,9 @@ if (effect) {
 }
 let areaFeature = new CONFIG.Item.documentClass(itemData, {parent: this.actor});
 let newTargets = chris.findNearby(targetToken, 10, null);
+for (let newTarget of newTargets) {
+	new Sequence().effect().atLocation(targetToken).stretchTo(newTarget).file('jb2a.chain_lightning.secondary.blue').play();
+}
 newTargets.push(targetToken);
 let newTargetUuids =[];
 for (let i of newTargets) {
