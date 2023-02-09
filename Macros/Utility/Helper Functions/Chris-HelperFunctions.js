@@ -215,7 +215,7 @@ window.chris = {
 		);
 	},
 	'checkTrait': function _checkTrait(actor, type, trait) {
-		return actor.system.traits[type].value.indexOf(trait) > -1;
+		return actor.system.traits[type].value.has(trait);
 	},
 	'functionToString': function _functiongToString(input) {
 		return `(${input.toString()})()`;
