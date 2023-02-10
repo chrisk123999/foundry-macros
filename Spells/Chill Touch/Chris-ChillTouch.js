@@ -1,0 +1,10 @@
+if (this.targets.size != 1) return;
+if (this.disadvantage) return;
+let type = this.actor.type === "npc" ? this.actor.system.details?.type?.value : this.actor.system.details?.race;
+if (type != 'undead') return;
+let effect = this.actor.effects.find(eff => eff.label === 'Chill Touch');
+if (!effect) return;
+let sourceActor = await fromUuid(effect.origin);
+let sourceActorId = sourceActor.actor.id;
+if (this.targets.first().actor.id != sourceActorId) return;
+this.disadvantage = true;

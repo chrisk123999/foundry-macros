@@ -233,5 +233,8 @@ window.chris = {
 			return false;
 		}
 		return itemData.toObject();
+	},
+	'raceOrType': function _raceOrType(actor) {
+		return actor.type === "npc" ? actor.system.details?.type?.value : actor.system.details?.race;
 	}
 };
