@@ -1,13 +1,32 @@
-function checkTrait(type, trait) {
-	return args[0].hitTargets[0].actor.system.traits[type].value.indexOf(trait) > -1;
-}
-if (args[0].hitTargets.length != 1) return;
-let damage = Math.ceil(args[0].damageTotal / 2);
+let chris = {
+	'applyDamage': async function _applyDamage(tokenList, damageValue, damageType) {
+		let targets;
+		if (Array.isArray(tokenList)) {
+			targets = new Set(tokenList);
+		} else {
+			targets = new Set([tokenList]);
+		}
+		await MidiQOL.applyTokenDamage(
+			[
+				{
+					damage: damageValue,
+					type: damageType
+				}
+			],
+			damageValue,
+			targets,
+			null,
+			null
+		);
+	},
+	'checkTrait': function _checkTrait(actor, type, trait) {
+		return actor.system.traits[type].value.has(trait);
+	}
+};
+if (this.hitTargets.size != 1) return;
+let damage = Math.ceil(this.damageTotal / 2);
 let hasImmunity = checkTrait('di', 'necrotic');
 if (hasImmunity) return;
 let hasResistance = checkTrait('dr', 'necrotic');
 if (hasResistance) damage = Math.ceil(damage / 2);
-if (damage != 0) {
-	let sourceToken = args[0].workflow.token.document;
-	await MidiQOL.applyTokenDamage([{damage: damage, type: 'healing' }], damage, new Set([sourceToken]), null, null);
-}
+if (damage != 0) await chris.applyDamage([this.token], damage, 'healing');
