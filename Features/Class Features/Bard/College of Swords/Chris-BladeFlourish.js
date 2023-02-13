@@ -1,68 +1,103 @@
 let chris = {
-    'dialog': async function _dialog(title, options) {
-        let buttons = options.map(([label,value]) => ({label,value}));
-        let selected = await warpgate.buttonDialog(
-            {
-                buttons,
-                title,
-            },
-            'column'
-        );
-        return selected;
-    },
-    'findEffect': function _findEffect(actor, name) {
-        return actor.effects.find(eff => eff.label === name);
-    }
+	'dialog': async function _dialog(title, options) {
+		let buttons = options.map(([label,value]) => ({label,value}));
+		let selected = await warpgate.buttonDialog(
+			{
+				buttons,
+				title,
+			},
+			'column'
+		);
+		return selected;
+	},
+	'findEffect': function _findEffect(actor, name) {
+		return actor.effects.find(eff => eff.label === name);
+	},
+	'applyDamage': async function _applyDamage(tokenList, damageValue, damageType) {
+		let targets;
+		if (Array.isArray(tokenList)) {
+			targets = new Set(tokenList);
+		} else {
+			targets = new Set([tokenList]);
+		}
+		await MidiQOL.applyTokenDamage(
+			[
+				{
+					damage: damageValue,
+					type: damageType
+				}
+			],
+			damageValue,
+			targets,
+			null,
+			null
+		);
+	},
+	'findNearby': function _findNearby(tokenDoc, range, disposition) {
+		let dispositionValue;
+		switch (disposition) {
+			case 'ally':
+				dispositionValue = 1;
+				break;
+			case 'neutral':
+				dispositionValue = 0;
+				break;
+			case 'enemy':
+				dispositionValue = -1;
+				break;
+			default:
+				dispositionValue = null;
+		}
+		return MidiQOL.findNearby(dispositionValue, tokenDoc, range);
+	}
 };
-let actor = args[0].actor;
-let effect1 = chris.findEffect(actor, 'BLade Flourish Movement');
-if (args[0].item.type === 'weapon' && !effect1) {
-    let feature0 = actor.items.getName('Blade Flourish Movement');
-	if (feature0) feature0.roll();
+let sourceActor = this.actor;
+let effect1 = chris.findEffect(sourceActor, 'BLade Flourish Movement');
+if (this.item.type === 'weapon' && !effect1) {
+	let feature0 = sourceActor.items.getName('Blade Flourish Movement');
+	if (feature0) feature0.use();
 }
-if (args[0].item.type === 'weapon' && args[0].hitTargets.length === 1) {
-	let effect2 = chris.findEffect(actor, 'Blade Flourish');
+if (this.item.type === 'weapon' && this.hitTargets.size === 1) {
+	let effect2 = chris.findEffect(sourceActor, 'Blade Flourish');
 	if (effect2) return;
-    let bardicInspiration = actor.items.getName('Bardic Inspiration');
-    let bardicInspirationUses = bardicInspiration.system.uses.value;
-    if (bardicInspirationUses <= 0) return;
-    let selectedOption = await chris.dialog('Use a Blade Flourish?', [
-        ['Defensive Flourish', 'DF'],
-        ['Mobile Flourish', 'MF'],
-        ['Slashing Flourish', 'SF'],
-        ['None', 'none']
-    ]) || 'none';
-    if (selectedOption != 'none') {
-        let effectData1 = {
-            'label': 'Blade Flourish',
-            'icon': 'icons/skills/melee/maneuver-sword-katana-yellow.webp',
-            'duration': {'turns': 1},
-            'origin': args[0].itemUuid,
-	        'flags': {
-		        'dae': {
-			        'specialDuration': [
-				        'combatEnd'
-			        ]
-		        }
-	        }
-        };
-        await actor.createEmbeddedDocuments("ActiveEffect", [effectData1]);
-        bardicInspiration.update({'system.uses.value': bardicInspirationUses - 1});
-        bardicInspirationDie = actor.system.scale.bard['bardic-inspiration'];
-        if (args[0].isCritical === true) {
-            bardicInspirationDie = 2 + bardicInspirationDie.substring(1);
-        }
-        const workflow = MidiQOL.Workflow.getWorkflow(args[0].uuid);
-        let damageType = args[0].item.system.damage.parts[0][1];
-        let damageFormula = workflow.damageRoll.formula + ' + ' + bardicInspirationDie + '[' + damageType + ']';
-        workflow.damageRoll = await new Roll(damageFormula).roll({async: true});
-        workflow.damageTotal = workflow.damageRoll.total;
-        workflow.damageRollHTML = await workflow.damageRoll.render();
-        bardicInspirationDieRoll = workflow.damageRoll.dice[workflow.damageRoll.dice.length - 1].total;
-        switch (selectedOption) {
-            case 'DF':
-				let feature2 = actor.items.getName('Defensive Flourish');
-				if (feature2) feature2.roll();
+	let bardicInspiration = sourceActor.items.getName('Bardic Inspiration');
+	let bardicInspirationUses = bardicInspiration.system.uses.value;
+	if (bardicInspirationUses <= 0) return;
+	let selectedOption = await chris.dialog('Use a Blade Flourish?', [
+		['Defensive Flourish', 'DF'],
+		['Mobile Flourish', 'MF'],
+		['Slashing Flourish', 'SF'],
+		['None', 'none']
+	]) || 'none';
+	if (selectedOption != 'none') {
+		let effectData1 = {
+			'label': 'Blade Flourish',
+			'icon': 'icons/skills/melee/maneuver-sword-katana-yellow.webp',
+			'duration': {'turns': 1},
+			'origin': this.item.uuid,
+			'flags': {
+				'dae': {
+					'specialDuration': [
+						'combatEnd'
+					]
+				}
+			}
+		};
+		await sourceActor.createEmbeddedDocuments("ActiveEffect", [effectData1]);
+		bardicInspiration.update({'system.uses.value': bardicInspirationUses - 1});
+		bardicInspirationDie = sourceActor.system.scale.bard['bardic-inspiration'];
+		if (this.isCritical) {
+			bardicInspirationDie = 2 + bardicInspirationDie.substring(1);
+		}
+		let damageType = this.item.system.damage.parts[0][1];
+		let damageFormula = this.damageRoll.formula + ' + ' + bardicInspirationDie + '[' + damageType + ']';
+		this.damageRoll = await new Roll(damageFormula).roll({async: true});
+		await this.setDamageRoll(damageRoll);
+		bardicInspirationDieRoll = this.damageRoll.dice[this.damageRoll.dice.length - 1].total;
+		switch (selectedOption) {
+			case 'DF':
+				let feature2 = sourceActor.items.getName('Defensive Flourish');
+				if (feature2) feature2.use();
 				let effectData2 = {
 					'label': 'Defensive Flourish',
 					'icon': 'icons/skills/melee/swords-parry-block-blue.webp',
@@ -75,43 +110,30 @@ if (args[0].item.type === 'weapon' && args[0].hitTargets.length === 1) {
 							'priority': 20
 						}
 					],
-					'origin': args[0].itemUuid,
-	                'flags': {
-		                'dae': {
-			                'specialDuration': [
-				                'combatEnd'
-			                ]
-		                }
-	                }
+					'origin': this.item.uuid,
+					'flags': {
+						'dae': {
+							'specialDuration': [
+								'combatEnd'
+							]
+						}
+					}
 				};
-                await actor.createEmbeddedDocuments("ActiveEffect", [effectData2]);
-                break;
-            case 'MF':
-				let feature3 = actor.items.getName('Mobile Flourish');
-				if (feature3) feature3.roll();
-                break;
-            case 'SF':
-				let feature4 = await actor.items.getName('Slashing Flourish');
-				if (feature4) feature4.roll();
-                let selfToken = canvas.tokens.get(args[0].tokenId);
-                if (!selfToken) break;
-                let nearbyTargets = MidiQOL.findNearby(-1, selfToken, 5, null);
-                let hitTokenId = args[0].hitTargets[0].id;
-                let removeIndex = nearbyTargets.findIndex(tok => tok.id === hitTokenId);
-                if (removeIndex != -1) nearbyTargets.splice(removeIndex, 1);
-                await MidiQOL.applyTokenDamage(
-                    [
-                        {
-                            damage: bardicInspirationDieRoll,
-                            type: damageType
-                        }
-                    ],
-                    bardicInspirationDieRoll,
-                    new Set(nearbyTargets),
-                    null,
-                    null
-                );
-                break;
-        }
-    }
+				await sourceActor.createEmbeddedDocuments("ActiveEffect", [effectData2]);
+				break;
+			case 'MF':
+				let feature3 = sourceActor.items.getName('Mobile Flourish');
+				if (feature3) feature3.use();
+				break;
+			case 'SF':
+				let feature4 = await sourceActor.items.getName('Slashing Flourish');
+				if (feature4) feature4.use();
+				let nearbyTargets = chris.findNearby(this.token, 5, 'enemy');
+				let hitTokenId = this.hitTargets.first().id;
+				let removeIndex = nearbyTargets.findIndex(tok => tok.id === hitTokenId);
+				if (removeIndex != -1) nearbyTargets.splice(removeIndex, 1);
+				await chris.applyDamage([nearbyTargets], bardicInspirationDieRoll, damageType);
+				break;
+		}
+	}
 }
