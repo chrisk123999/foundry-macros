@@ -1,4 +1,4 @@
-if(!this.item.system.components.concentration) return;
+if(!this.item.system.components?.concentration) return;
 let effect = this.actor.effects.find(i => i.label === "Concentrating");
 if (!effect) return;
 let updates = {
