@@ -112,7 +112,7 @@ if (selected.buttons === false) return;
 let targetTokenUuid = selected.inputs.find(id => id != false);
 if (!targetTokenUuid) return;
 let feature = this.actor.items.getName('Reaper');
-if (feature) await feature.roll();
+if (feature) await feature.use();
 let options = {
 	'showFullCard': false,
 	'createWorkflow': true,
