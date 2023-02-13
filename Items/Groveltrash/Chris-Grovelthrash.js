@@ -1,33 +1,50 @@
-function showMenu(title, options) {
-    return game.macros.getName('Chris-WarpgateMenuHelper').execute(title, options);
-}
-if (args[0].hitTargets.length != 1) return;
-let selectedOption = await showMenu('Activate Grovelthrash?', [['Yes', true], ['No', false]]);
+window.chris = {
+	'dialog': async function _dialog(title, options) {
+		let buttons = options.map(([label,value]) => ({label,value}));
+		let selected = await warpgate.buttonDialog(
+			{
+				buttons,
+				title,
+			},
+			'column'
+		);
+		return selected;
+	},
+	'applyDamage': async function _applyDamage(tokenList, damageValue, damageType) {
+		let targets;
+		if (Array.isArray(tokenList)) {
+			targets = new Set(tokenList);
+		} else {
+			targets = new Set([tokenList]);
+		}
+		await MidiQOL.applyTokenDamage(
+			[
+				{
+					damage: damageValue,
+					type: damageType
+				}
+			],
+			damageValue,
+			targets,
+			null,
+			null
+		);
+	}
+};
+if (this.hitTargets.size != 1) return;
+let selectedOption = await chris.dialog('Activate Grovelthrash?', [['Yes', true], ['No', false]]);
 if (!selectedOption) return;
 let damageDiceNum = 2;
-if (args[0].isCritical === true) damageDiceNum = damageDiceNum * 2;
+if (this.isCritical) damageDiceNum = damageDiceNum * 2;
 let damageDice = damageDiceNum + 'd6[bludgeoning]';
-let workflow = args[0].workflow;
-let damageFormula = workflow.damageRoll._formula + ' + ' + damageDice;
-workflow.damageRoll = await new Roll(damageFormula).roll({async: true});
-workflow.damageTotal = workflow.damageRoll.total;
-workflow.damageRollHTML = await workflow.damageRoll.render();
+let damageFormula = this.damageRoll._formula + ' + ' + damageDice;
+this.damageRoll = await new Roll(damageFormula).roll({async: true});
+await this.setDamageRoll(damageRoll);
 let selfDamageFormula = '1d6[psychic]';
 let selfDamageRoll = await new Roll(selfDamageFormula).roll({async: true});
 selfDamageRoll.toMessage({
-    rollMode: 'roll',
-    speaker: {alias: name},
-    flavor: 'Grovelthrash'
+	rollMode: 'roll',
+	speaker: {alias: name},
+	flavor: this.item.name
 });
-await MidiQOL.applyTokenDamage(
-    [
-        {
-            damage: selfDamageRoll.total,
-            type: 'psychic'
-        }
-    ],
-    selfDamageRoll.total,
-    new Set([workflow.token]),
-    null,
-    null
-);
+await chris.applyDamage([this.token], selfDamageRoll.total, 'psychic');
