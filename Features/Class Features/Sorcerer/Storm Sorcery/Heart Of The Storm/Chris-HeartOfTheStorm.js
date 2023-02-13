@@ -5,4 +5,4 @@ let damageType = this.defaultDamageType;
 let validTypes = ['lightning', 'thunder'];
 if (!validTypes.includes(damageType)) return;
 let feature = this.actor.items.getName('Heart of the Storm');
-if (feature) await feature.roll();
+if (feature) await feature.use();
