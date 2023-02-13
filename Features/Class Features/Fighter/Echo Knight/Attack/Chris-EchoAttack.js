@@ -1,4 +1,3 @@
-let sourceActorUuid = 'Change This';
 let echoActorUuid = 'Change This';
 
 let chris = {
@@ -15,9 +14,8 @@ let chris = {
 	}
 };
 if (this.targets.size != 1) return;
-let originalActor = await fromUuid(sourceActorUuid);
 let generatedMenu = [];
-originalActor.items.forEach(item => {
+this.actor.items.forEach(item => {
 	if (item.type === 'weapon' && item.system.equipped === true) {
 		generatedMenu.push([item.name, item.id]);
 	}
@@ -27,7 +25,7 @@ if (generatedMenu.length === 0) return;
 if (generatedMenu.length === 1) selection = generatedMenu[0][1];
 if (!selection) selection = await chris.dialog('What weapon do you want to use?', generatedMenu);
 if (!selection) return;
-let weaponData = duplicate(originalActor.items.get(selection).toObject());
+let weaponData = duplicate(this.actor.items.get(selection).toObject());
 let options = {
 	'showFullCard': false,
 	'createWorkflow': true,
