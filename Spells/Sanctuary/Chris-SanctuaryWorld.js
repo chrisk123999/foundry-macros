@@ -8,9 +8,9 @@ Hooks.on('midi-qol.AttackRollComplete', async workflow => {
     let scaling = targetItem.system.save.scaling;
     let spellDC;
     if (scaling === 'spell') {
-        spellDC = targetItem.parent.system.attributes.spelldc;
+        spellDC = targetItem.actor.system.attributes.spelldc;
     } else {
-        spellDC = targetItem.parent.system.abilities[scaling].dc;
+        spellDC = targetItem.actor.system.abilities[scaling].dc;
     }
     let sourceActor = workflow.actor;
     let save = await sourceActor.rollAbilitySave('wis');
