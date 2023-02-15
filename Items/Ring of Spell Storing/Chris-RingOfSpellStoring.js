@@ -204,9 +204,7 @@ if (pickOption === 'store') {
 		await this.actor.createEmbeddedDocuments('Item', storedSpells);
 	}
 } else if (pickOption === 'reset') {
-	await this.item.setFlag('world', 'item.ross.storedSpells', []);
-	await this.item.setFlag('world', 'item.ross.spellSlots', 0);
-	await this.item.setFlag('world', 'item.ross.showSpells', true);
+	await this.item.setFlag('world', 'item.ross', {'storedSpells': [], 'spellSlots': 0, 'showSpells': true});
 	if (showSpells) deleteSpells(this.actor);
 	await this.item.update({'name': 'Ring of Spell Storing (0/5)'});
 	ui.notifications.info('Ring Reset.');
