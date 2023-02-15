@@ -91,7 +91,7 @@ if (this.item.type === 'weapon' && this.hitTargets.size === 1) {
 		}
 		let damageType = this.item.system.damage.parts[0][1];
 		let damageFormula = this.damageRoll.formula + ' + ' + bardicInspirationDie + '[' + damageType + ']';
-		this.damageRoll = await new Roll(damageFormula).roll({async: true});
+		let damageRoll = await new Roll(damageFormula).roll({async: true});
 		await this.setDamageRoll(damageRoll);
 		bardicInspirationDieRoll = this.damageRoll.dice[this.damageRoll.dice.length - 1].total;
 		switch (selectedOption) {
