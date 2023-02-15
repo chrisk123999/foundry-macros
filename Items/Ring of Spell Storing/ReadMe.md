@@ -12,6 +12,6 @@ Custom Character Sheet Sections
   - Chris-RingOfSpellStoringAttack.js  
   - Chris-RingOfSpellStoringCast.js   
 # Other Notes  
-Showing stored spells should be toggled off before moving a ring from one actor to another.  
-Used spells should only be cleared out after any effects created from them have ended.  
-Lines 50 to 59 in "Chris-RingOfSpellStoringCast.js" can be added back in if you want the spells to get auto-removed during a long rest. Not reccomended to be enabled if the actor is casting spells that need to keep their effects during a long rest.
+- Showing stored spells should be toggled off before moving a ring from one actor to another.  
+- Used spells should only be cleared out after any effects created from them have ended.  
+- Lines 50 to 59 in "Chris-RingOfSpellStoringCast.js" can be added back in if you want the spells to get auto-removed during a long rest. Not reccomended to be enabled if the actor is casting spells that need to keep their effects beyond a long rest.
