@@ -1,7 +1,7 @@
 Hooks.on('midi-qol.preAttackRoll', async workflow => {
-    if (workflow.targets.size != 1) return;
+	if (workflow.targets.size != 1) return;
 	let targetToken = workflow.targets.first().document;
-    if (!targetToken) return;
+	if (!targetToken) return;
 	let sourceToken = workflow.token.document;
 	let sourceTemplates = game.modules.get('templatemacro').api.findContainers(sourceToken);
 	let sourceInDarkness = false;
@@ -40,16 +40,18 @@ Hooks.on('midi-qol.preAttackRoll', async workflow => {
 	console.log('Source see target: ' + (sourceCanSeeTarget || false));
 	console.log('Target see source: ' + (targetCanSeeSource || false));
 	if (sourceCanSeeTarget && targetCanSeeSource) return;
-	if (sourceCanSeeTarget && !targetCanSeeSource) workflow.advantage = true;
+	if (sourceCanSeeTarget && !targetCanSeeSource) {
+		workflow.advantage = true;
+		workflow.attackAdvAttribution['Darkness: Target Can\'t See Source'] = true;
+	}
 	if (!sourceCanSeeTarget && targetCanSeeSource) {
 		workflow.disadvantage = true;
 		workflow.flankingAdvantage = false;
+		workflow.attackAdvAttribution['Darkness: Source Can\'t See Target'] = true;
 	}
 	if (!sourceCanSeeTarget && !targetCanSeeSource) {
-		workflow.advantage = false;
-		workflow.disadvantage = false;
-		workflow.rollOptions.advantage = false;
-		workflow.rollOptions.disadvantage = false;
-		workflow.flankingAdvantage = false;
+		workflow.advantage = true;
+		workflow.disadvantage = true;
+		workflow.attackAdvAttribution['Darkness: Target And Source Can\'t See Eachother'] = true;
 	}
 });
