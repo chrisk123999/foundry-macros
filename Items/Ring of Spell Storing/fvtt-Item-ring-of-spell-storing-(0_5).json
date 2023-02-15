@@ -1,0 +1,199 @@
+{
+  "name": "Ring of Spell Storing (0/5)",
+  "type": "equipment",
+  "system": {
+    "description": {
+      "value": "<p>Change this description.</p><p>Notes:</p><p>Showing stored spells should be toggled off before moving a ring from one actor to another.</p><p>Used spells should only be cleared out after any effects created from them have ended.</p><p>Make sure you have all of the included scripts.  Do not rename them.</p>",
+      "chat": "",
+      "unidentified": "Ring"
+    },
+    "source": "Basic Rules, Player's Handbook pg 192",
+    "quantity": 1,
+    "weight": 0,
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "attunement": 2,
+    "equipped": true,
+    "rarity": "rare",
+    "identified": true,
+    "activation": {
+      "type": "special",
+      "cost": null,
+      "condition": ""
+    },
+    "duration": {
+      "value": "",
+      "units": ""
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "self"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "self"
+    },
+    "uses": {
+      "value": 0,
+      "max": "",
+      "per": "",
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": "",
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 10,
+      "type": "trinket",
+      "dex": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "baseItem": "",
+    "speed": {
+      "value": null,
+      "conditions": ""
+    },
+    "strength": 0,
+    "stealth": false,
+    "proficient": true
+  },
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {
+        "type": "Ring",
+        "avatarUrl": "https://www.dndbeyond.com/avatars/19/280/636382380651345395.jpeg",
+        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/7/364/636284761492570136.jpeg",
+        "filterType": "Ring",
+        "isConsumable": false,
+        "isContainer": false,
+        "isCustomItem": false,
+        "isHomebrew": false,
+        "isMonkWeapon": false,
+        "isPack": false,
+        "levelInfusionGranted": null,
+        "tags": [
+          "Buff",
+          "Utility",
+          "Jewelry"
+        ],
+        "sources": [
+          {
+            "sourceId": 1,
+            "pageNumber": null,
+            "sourceType": 2
+          },
+          {
+            "sourceId": 2,
+            "pageNumber": 192,
+            "sourceType": 1
+          }
+        ]
+      },
+      "id": 1040666864,
+      "entityTypeId": 1439493548,
+      "containerEntityId": 93625897,
+      "containerEntityTypeId": 1581111423,
+      "definitionEntityTypeId": 112130694,
+      "definitionId": 4730,
+      "originalName": "Ring of Spell Storing",
+      "version": "3.3.9",
+      "keepIcon": true,
+      "importId": "3kii1VjHNllG39IP"
+    },
+    "magicitems": {
+      "enabled": true,
+      "charges": "0",
+      "chargeType": "c1",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t2",
+      "rechargeUnit": "r1",
+      "destroy": false,
+      "destroyCheck": "d1",
+      "spells": {},
+      "feats": {},
+      "tables": {},
+      "equipped": true,
+      "attuned": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "sorting": "l"
+    },
+    "infusions": {
+      "maps": [],
+      "applied": [],
+      "infused": false
+    },
+    "custom-character-sheet-sections": {
+      "sectionName": ""
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]Chris-RingOfSpellStoring"
+    },
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "world": {
+      "item": {
+        "ross": {
+          "storedSpells": [],
+          "spellSlots": 0,
+          "showSpells": true
+        }
+      }
+    },
+    "core": {
+      "sourceId": "Actor.ajuA7OJxItBFhlyB.Item.xMiYAN0kkFr618CP"
+    },
+    "exportSource": {
+      "world": "homebrew",
+      "system": "dnd5e",
+      "coreVersion": "10.291",
+      "systemVersion": "2.1.4"
+    }
+  },
+  "effects": [],
+  "img": "icons/equipment/finger/ring-faceted-engraved-gold-purple.webp",
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.1.4",
+    "coreVersion": "10.291",
+    "createdTime": 1676451598000,
+    "modifiedTime": 1676464180022,
+    "lastModifiedBy": "zqNQc5kF3CqkzwOD"
+  }
+}
