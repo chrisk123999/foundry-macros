@@ -9,5 +9,3 @@ Template Macros
 - Make a hotbar macro and paste in the macro from "Chris-CloudkillEffect.js".  
 - Check "Execute Macro As GM."  
 - Name it "Chris-CloudkillEffect" and configure it's ownership to "All Players: Observer."  
-# Other Notes  
-Template automatic movement still needs to be completed.
