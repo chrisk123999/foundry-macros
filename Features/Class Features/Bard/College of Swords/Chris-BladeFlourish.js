@@ -52,7 +52,7 @@ let chris = {
 	}
 };
 let sourceActor = this.actor;
-let effect1 = chris.findEffect(sourceActor, 'BLade Flourish Movement');
+let effect1 = chris.findEffect(sourceActor, 'Blade Flourish Movement');
 if (this.item.type === 'weapon' && !effect1) {
 	let feature0 = sourceActor.items.getName('Blade Flourish Movement');
 	if (feature0) feature0.use();
