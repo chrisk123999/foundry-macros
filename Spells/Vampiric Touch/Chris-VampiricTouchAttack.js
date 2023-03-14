@@ -28,5 +28,5 @@ let damage = Math.ceil(this.damageTotal / 2);
 let hasImmunity = chris.checkTrait('di', 'necrotic');
 if (hasImmunity) return;
 let hasResistance = chris.checkTrait('dr', 'necrotic');
-if (hasResistance) damage = Math.ceil(damage / 2);
+if (hasResistance) damage = Math.floor(damage / 2);
 if (damage != 0) await chris.applyDamage([this.token], damage, 'healing');
